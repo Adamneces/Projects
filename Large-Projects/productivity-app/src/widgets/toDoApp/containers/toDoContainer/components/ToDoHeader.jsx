@@ -3,7 +3,7 @@ import React from 'react'
 const ToDoHeader = () => {
   return (
     <nav>
-        <p>aloha</p>
+        <h1>My To-Do List</h1>
     </nav>
   )
 }
