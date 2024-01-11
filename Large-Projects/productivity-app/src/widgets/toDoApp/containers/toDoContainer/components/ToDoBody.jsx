@@ -5,7 +5,10 @@ const ToDoBody = ({ toDos, setToDos }) => {
 
   return (
     <div>
-      <ToDoTask toDos={toDos} setToDos={setToDos} />
+      <ToDoTask 
+      toDos={toDos} 
+      setToDos={setToDos} 
+      />
     </div>
   );
 };

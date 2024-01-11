@@ -1,8 +1,5 @@
 body{
-    background-image: linear-gradient(to right top, #214b8b, #007cbc, #00a9b8, #00d17d, #a8eb12);
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100vh;
+    background-color: #4d4d4d;
 }
 *{
     box-sizing: border-box;

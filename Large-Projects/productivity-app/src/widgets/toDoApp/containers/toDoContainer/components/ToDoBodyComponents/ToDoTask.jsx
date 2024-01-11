@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import backgroundColors from '../utilities/backgroundColors';
 import styles from "./ToDoTask.module.css";
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare, faTrash, faRotateLeft } from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare, faTrash, faRotateLeft, faDownload } from '@fortawesome/free-solid-svg-icons'
 
 
 const ToDoTask = ({ toDos, setToDos }) => {
   const [editedTasks, setEditedTasks] = useState([]);
   const [editedTaskIndex, setEditedTaskIndex] = useState(null);
+
+  function sortByPriority(taskA, taskB){
+    const priorityOrder = ['high', 'medium', 'low', 'nopriority'];
+    const priorityA = priorityOrder.indexOf(taskA.priority);
+    const priorityB = priorityOrder.indexOf(taskB.priority);
+
+    return priorityA - priorityB; 
+  };
+
+  const sortedToDos = toDos.sort(sortByPriority);
 
   useEffect(() => {
     setEditedTasks(toDos.map((task) => task.task));
@@ -47,9 +59,19 @@ const ToDoTask = ({ toDos, setToDos }) => {
 
   return (
     <ul className={styles.tasksContainer}>
-      {toDos.map((task, index) => (
-        <div className={task.isEditing ? styles.taskContainerEditing : styles.taskContainer} key={task.taskID}>
-          <button disabled={task.taskIsDone} onClick={() => handleFinishTask(index)}>O</button>
+      {sortedToDos.map((task, index) => (
+        <div 
+        className={task.isEditing ? styles.taskContainerEditing : styles.taskContainer} 
+        key={task.taskID}
+        style={{background: backgroundColors[`task${task.color}`], borderLeft: !task.isEditing && `4px solid ${backgroundColors[task.priority]}`}}
+        >
+          <input
+           className={styles.checkboxInput}
+           type='checkbox'
+           checked={task.taskIsDone}
+           disabled={task.taskIsDone} 
+           onClick={() => handleFinishTask(index)} 
+           />
           {task.isEditing ? (
             <input
               autoFocus={editedTaskIndex === index}
@@ -63,7 +85,10 @@ const ToDoTask = ({ toDos, setToDos }) => {
               }}
             />
           ) : (
+            <div className={styles.taskParagraphContainer}>
             <p className={task.taskIsDone ? styles.taskIsDone : styles.task}>{task.task}</p>
+            <p className={styles.priorityText} >{task.priority !== 'nopriority' ? task.priority : ''}</p>
+            </div>
           )}
           {task.taskIsDone ? (
            <FontAwesomeIcon 
@@ -82,7 +107,7 @@ const ToDoTask = ({ toDos, setToDos }) => {
                   }
                 }}
               >
-                {task.isEditing ? 'save' : <FontAwesomeIcon icon={faPenToSquare} className={styles.editIcon} />}
+                {task.isEditing ? <FontAwesomeIcon icon={faDownload} className={styles.editIcon}/> : <FontAwesomeIcon icon={faPenToSquare} className={styles.editIcon} />}
               </button>
               <button onClick={() => handleDeleteTask(task)}><FontAwesomeIcon icon={faTrash} className={styles.deleteIcon}/></button>
             </>
