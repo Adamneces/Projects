@@ -4,6 +4,8 @@ import styles from './ToDoForm.module.css';
 import backgroundColors from './utilities/backgroundColors';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const ToDoForm = (props) => {
   const [newTask, setNewTask] = useState({
@@ -18,6 +20,8 @@ const ToDoForm = (props) => {
   const [showForm, setShowForm] = useState(false);
   const [color, setColor] = useState('rgb(44, 44, 44)');
   const [priority, setPriority] = useState('rgb(44, 44, 44)');
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [showCalendar, setShowCalendar] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -34,15 +38,12 @@ const ToDoForm = (props) => {
     setShowForm(false);
     setColor('rgb(44, 44, 44)');
     setPriority('rgb(44, 44, 44)');
-    console.log(newTask);
-    console.log(getTodayDate());
   }
-
 
   function handleNewTaskChange(key, event) {
     setNewTask((prev) => ({
       ...prev,
-      [key]: event.target.value,
+      [key]: event.target.value
     }));
   }
 
@@ -62,6 +63,11 @@ const ToDoForm = (props) => {
     const formattedDate = today.toISOString().split('T')[0];
     return formattedDate;
   }
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    setShowCalendar(false);
+  };
 
   return (
     <>
@@ -84,7 +90,7 @@ const ToDoForm = (props) => {
             type='text'
             value={newTask.description}
             placeholder='Description...'
-            maxLength={140}
+            maxLength={140}setShowCalendar
           />
           <div className={styles.inputGroup}>
             <label htmlFor="time">Set time?</label>
@@ -97,17 +103,33 @@ const ToDoForm = (props) => {
               style={{ backgroundColor: 'rgb(44, 44, 44)' }}
             />
           </div>
+
           <div className={styles.inputGroup}>
             <label htmlFor="date">Set date?</label>
-            <input
-            name='date'
-            type='date'
-            onChange={(event) => handleNewTaskChange('date', event)}
-            value={newTask.date}
-            className={styles.input}
-            style={{ backgroundColor: 'rgb(44, 44, 44)' }}
-          />
+            <div className={styles.btnContainer}>
+            <button
+              className={styles.dateButton}
+              type="button"
+              onClick={() => setShowCalendar(!showCalendar)}
+              style={{ display: showCalendar ? 'none' : 'block' }}
+            >
+              {selectedDate ?
+                (selectedDate.toDateString() === new Date().toDateString() ? 'Today' : selectedDate.toDateString())
+                : 'Today'
+              }
+            </button>
+            {showCalendar && (
+            <DatePicker
+            className={styles.datepicker} 
+            selected={selectedDate} 
+            onChange={handleDateChange} 
+            minDate={new Date()}
+            dateFormat="dd.MM"
+            />
+)}
+            </div>
           </div>
+
           <div className={styles.inputGroup}>
             <label htmlFor="color">color:</label>
             <select
