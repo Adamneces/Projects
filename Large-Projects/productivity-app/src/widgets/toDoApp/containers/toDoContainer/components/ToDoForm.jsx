@@ -14,11 +14,7 @@ const ToDoForm = (props) => {
     time: '',
     color: 'default',
     priority: 'nopriority',
-    date: new Date().toLocaleDateString('en-GB', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    }),
+    date: new Date(),
     taskID: generateID(),
   });
   const [showForm, setShowForm] = useState(false);
@@ -64,16 +60,14 @@ const ToDoForm = (props) => {
   }
 
   function getTodayDate() {
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0];
-    return formattedDate;
+    return new Date();
   }
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
     setNewTask((prev) => ({
       ...prev,
-      date: date.toLocaleDateString('en-GB'),
+      date: date,  // Set the date as a Date object
     }));
     setShowCalendar(false);
   };
@@ -85,6 +79,7 @@ const ToDoForm = (props) => {
             onChange={(event) => handleNewTaskChange('task', event)}
             name='task'
             type='text'
+            autoFocus
             value={newTask.task}
             required
             placeholder="What's the task?"
@@ -172,11 +167,19 @@ const ToDoForm = (props) => {
             <option value='low'>low</option>
           </select>
           </div>
-
-          <button 
-          type='submit'
-          className={styles.submitButton}
-          >submit</button>
+          
+          <div className={styles.submit_closeButton_container}>
+            <button 
+              type='submit'
+              className={styles.submitButton}
+            >submit</button>
+            <button
+              onClick={() => setShowForm(false)}
+              className={styles.formCloseButton}
+            >
+              close
+            </button>
+          </div>
         </form>
       ) : (
         <div 

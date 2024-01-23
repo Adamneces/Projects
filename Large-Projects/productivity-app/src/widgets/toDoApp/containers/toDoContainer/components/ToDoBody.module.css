@@ -1,0 +1,7 @@
+.tasksContainer{
+    height: 100%;
+    overflow: scroll;
+}
+.tasksContainer::-webkit-scrollbar {
+    width: 0; /* Hide scrollbar */
+  }

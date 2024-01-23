@@ -3,12 +3,11 @@ import styles from "./ToDo.module.css";
 
 import ToDoHeader from './components/ToDoHeader';
 import ToDoBody from './components/ToDoBody';
-import ToDoFooter from './components/ToDoFooter';
 import ToDoForm from './components/ToDoForm';
 
 const ToDo = (props) => {
   const [displayTasks, setDisplayTasks] = useState('today');
-  console.log(displayTasks);
+  const [filterTasks, setFilterTasks] = useState('priority');
 
   function handleSetDisplayTasks(date) {
     setDisplayTasks(date);
@@ -20,14 +19,17 @@ const ToDo = (props) => {
 
   return (
     <div className={styles.ToDoContainer}>
-      <ToDoHeader displayTasks={displayTasks} setDisplayTasks={handleSetDisplayTasks} />
+      <ToDoHeader 
+      setDisplayTasks={handleSetDisplayTasks} 
+      setFilterTasks={setFilterTasks}
+      />
       <ToDoBody 
       toDos={props.toDos} 
       setToDos={props.setToDos}
       displayTasks={displayTasks}
+      filterTasks={filterTasks}
       />
       <ToDoForm handleNewTask={handleNewTask} />
-      <ToDoFooter />
     </div>
   )
 }

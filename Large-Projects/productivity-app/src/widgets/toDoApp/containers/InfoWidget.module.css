@@ -1,0 +1,63 @@
+.container{
+    width: 300px;
+    height: 170px;
+    position: absolute;
+    background: rgb(40,40,40);
+    left: 510px;
+    top: 300px;
+    border-radius: 10px;
+    margin-top: 10px;
+    color: white;
+    padding: 10px 20px;
+}
+.heading{
+    font-size: 18px;
+    margin: 5px 0 0 0;
+}
+.currentTemperature{
+    font-size: 30px;
+    font-weight: 500;
+    margin: 0;
+}
+.infoContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 10px 0 0 0;
+}
+.icon{
+    width: 55px;
+    height: auto;
+}
+.forecastContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+}
+.forecastDayContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+.forecastIcon{
+    width: 33px;
+    margin-bottom: 5px;
+    height: auto;
+}
+.forecastTemp{
+    font-size: 14px;
+}
+.forecastDay{
+    font-size: 14px;
+    margin: 0;
+}
+.forecast_day_icon{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.minTemp{
+    color: rgb(139, 139, 139);
+}

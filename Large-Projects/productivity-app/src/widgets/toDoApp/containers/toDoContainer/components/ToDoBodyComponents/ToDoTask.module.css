@@ -24,26 +24,36 @@
     font-size: 12px;
 }
 .taskContainer{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 0px 10px;
     border-radius: 8px;
     width: 100%;
-    font-size: 18px;
     margin-bottom: 10px;
 }
 .taskContainerEditing{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     background: rgba(0,0,0,0.15);
     padding: 0px 10px;
     border-radius: 8px;
     width: 100%;
-    font-size: 18px;
     margin-bottom: 10px;
-    border: 3px solid #8F8F8F;
+    border: 3px solid #e4b660;
+}
+.taskMainTextContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 18px;
+}
+.taskAdditionalTextContainer{
+    display: flex;
+    width: 100%;
+    padding: 0;
+    margin-top: -15px;
+    height: 30px;
+    font-size: 12px;
+}
+.taskAdditionalTextContainer p {
+    margin: 0 0 0 33px;
+    letter-spacing: 0.75px;
 }
 .taskTextContainer{
     width: 80%;

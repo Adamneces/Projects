@@ -10,3 +10,6 @@ button{
     background: transparent;
     cursor: pointer;
 }
+body{
+    font-family: 'Poppins', sans-serif;
+}

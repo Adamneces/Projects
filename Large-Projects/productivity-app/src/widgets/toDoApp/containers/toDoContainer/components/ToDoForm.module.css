@@ -94,7 +94,8 @@
 }
 .createTaskButtonContainer{
     position: absolute;
-    bottom: 3%;
+    bottom: 1%;
+    left: 2%;
     background: rgb(107, 80, 80);
     width: 60px;
     height: 60px;
@@ -111,4 +112,18 @@
 }
 .createTaskButton{
     font-size: 30px;
+}
+.submit_closeButton_container{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.formCloseButton{
+    color: white;
+    padding: 5px 15px;
+    background: rgb(57, 36, 36);
+    border-radius: 7px;
+    margin-left: 10px;
+    font-size: 15px;
 }
