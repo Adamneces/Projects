@@ -19,7 +19,6 @@
     height: 40px;
     border-radius: 10px;
     margin-top: 10px;
-    border: 1px solid rgb(162, 162, 162);
     padding: 0;
 }
 .progressBar{
@@ -34,25 +33,19 @@
     0% {
       background: rgb(29, 174, 29);
     }
-    20% {
-      background: rgb(202, 255, 202);
+    25% {
+      background: rgb(190, 255, 190)
     }
-    40% {
-      background: rgb(29, 174, 29);
+    50%{
+      background: rgb(16, 221, 204);
     }
-    60%{
-      background: rgb(202, 255, 202);
-    }
-    80%{
-      background: rgb(29, 174, 29);
-    }
-    90% {
-        background: rgb(202, 255, 202);
+    75% {
+      background: rgb(150, 255, 227);
     }
     100%{
-        background: rgb(29, 174, 29);
+      background: rgb(29, 174, 29);
     }
   }
   .animateComplete {
-    animation: progressBarAnimation 0.9s;
+    animation: progressBarAnimation 7s infinite;
   }

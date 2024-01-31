@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './Tracker.module.css'
 
-const Tracker = ({toDos}) => {
+const Tracker = ({toDos, isSameDay, parseDate, isWithinWeek}) => {
 
 const today = new Date();
 const completedTasks = toDos.filter((task) => task.taskIsDone);
@@ -25,22 +25,9 @@ const todaysTasks = toDos.filter((task) => {
   });
   const tomorrowsTasksCompleted = tomorrowTasks.filter((task) => task.taskIsDone);
 
-    function isSameDay(date1, date2) {
-        return (date1.getFullYear() === date2.getFullYear() &&
-               date1.getMonth() === date2.getMonth() &&
-               date1.getDate() === date2.getDate());
-      }
-
-    function parseDate(date) {
-        return date instanceof Date ? date : new Date(date);
-      }
-      function isWithinWeek(date, startOfWeek, endOfWeek) {
-        return date >= startOfWeek && date <= endOfWeek;
-      }
-
       const withinWeekTasks = toDos.filter((task) => isWithinWeek(parseDate(task.date), firstDay, lastDay)); 
       const withinWeekTasksCompleted = withinWeekTasks.filter((task) => task.taskIsDone);
-      const progressPercentage = (completedTasks.length / toDos.length) * 100
+      const progressPercentage = ((completedTasks.length / toDos.length) * 100).toFixed(1);
 
   return (
     <div className={styles.trackerContainer}>
@@ -62,11 +49,11 @@ const todaysTasks = toDos.filter((task) => {
       </div>
       <div className={styles.trackerLineContainer}>
         <span>Progress:</span>
-        <span>{progressPercentage ? progressPercentage+'%': '0'}</span>
+        <span>{progressPercentage > 0 ? progressPercentage+'%': '0'}</span>
       </div>
       <div className={styles.progressBarContainer}>
       <div
-       className={`${styles.progressBar} ${progressPercentage === 100 ? styles.animateComplete : ''}`}
+       className={`${styles.progressBar} ${progressPercentage > 99.9 ? styles.animateComplete : ''}`}
        style={{
          width: `${progressPercentage}%`,
          background:

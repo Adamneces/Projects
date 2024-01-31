@@ -1,7 +1,9 @@
 .appContainer{
     display: flex;
     justify-content: flex-start;
-    width: 100%;
+    width: 47%;
+    border: solid red;
     height: 100vh;
     position: relative;
+
 } 

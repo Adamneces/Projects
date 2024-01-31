@@ -3,29 +3,54 @@ import styles from './InfoWidget.module.css';
 
 const InfoWidget = () => {
   const [weatherData, setWeatherData] = useState(null);
+  const [userLocation, setUserLocation] = useState(null);
+
+  const apiKey = '85db84b7df32425a852135626242001';
+  const baseUrl = 'http://api.weatherapi.com/v1';
+  const endpoint = '/forecast.json';
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const apiKey = '85db84b7df32425a852135626242001';
-        const baseUrl = 'http://api.weatherapi.com/v1';
-        const endpoint = '/forecast.json';
-
-        const apiUrl = `${baseUrl}${endpoint}?key=${apiKey}&q=Liberec&days=3&aqi=no&alerts=no`;
-        const response = await fetch(apiUrl);
-
-        if (response.ok) {
-          const data = await response.json();
-          setWeatherData(data);
-        } else {
-          console.error('Failed to fetch weather data');
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation({ latitude, longitude });
+        },
+        (error) => {
+          console.error('Error getting user location:', error.message);
+          // You might want to handle this error case and set a default location if needed
         }
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
-      }
-    };
-    fetchData();
-  }, []); // Run this effect only once when the component mounts
+      );
+    } else {
+      console.error('Geolocation is not supported in this browser');
+    }
+  }, []); 
+
+        useEffect(() => {
+          const fetchData = async () => {
+            try {
+              let apiUrl;
+        
+              if (userLocation) {
+                apiUrl = `${baseUrl}${endpoint}?key=${apiKey}&q=${userLocation.latitude},${userLocation.longitude}&days=3&aqi=no&alerts=no`;
+              } else {
+                apiUrl = `${baseUrl}${endpoint}?key=${apiKey}&q=Florence&days=3&aqi=no&alerts=no`;
+              }      
+              const response = await fetch(apiUrl);
+        
+              if (response.ok) {
+                const data = await response.json();
+                setWeatherData(data);
+              } else {
+                console.error('Failed to fetch weather data');
+              }
+            } catch (error) {
+              console.error('Error fetching weather data:', error);
+            }
+          };
+        
+          fetchData();
+        }, [userLocation]); 
 
   const getDayOfWeek = (dateString) => {
     const daysOfWeek = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
@@ -34,6 +59,7 @@ const InfoWidget = () => {
     return dayOfWeek;
   };
 
+  console.log(weatherData);
   return (
     <div className={styles.container}>
       {weatherData ? (
@@ -56,7 +82,7 @@ const InfoWidget = () => {
           </div>
         </>
       ) : (
-        <span>no data available</span>
+        <span>no weather data available</span>
       )}
     </div>
   );

@@ -7,16 +7,32 @@ import DailyTracker from './containers/DailyTracker'
 import styles from './ToDoApp.module.css'
 
 
-
 const ToDoApp = () => {
   const [toDos, setToDos] = useState([]);
+
+  function isSameDay(date1, date2) {
+    return (date1.getFullYear() === date2.getFullYear() &&
+           date1.getMonth() === date2.getMonth() &&
+           date1.getDate() === date2.getDate());
+  }
+  function parseDate(date) {
+    return date instanceof Date ? date : new Date(date);
+  }
+  function isWithinWeek(date, startOfWeek, endOfWeek) {
+    return date >= startOfWeek && date <= endOfWeek;
+  }
 
   return (
     <div className={styles.appContainer}>
       <ToDo toDos={toDos} setToDos={setToDos} />
-      <Tracker toDos={toDos} />
+      <Tracker 
+      isSameDay={isSameDay} 
+      toDos={toDos} 
+      parseDate={parseDate}
+      isWithinWeek={isWithinWeek}
+      />
       <InfoWidget />
-      <DailyTracker />
+      <DailyTracker isSameDay={isSameDay} toDos={toDos} />
     </div>
   )
 }

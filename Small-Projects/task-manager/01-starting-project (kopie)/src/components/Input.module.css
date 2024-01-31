@@ -1,0 +1,38 @@
+.paragraph{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 16px 0;
+}
+.label{
+    font-size: 14px;
+    color: #000000;
+    line-height: 20px;
+    text-transform: uppercase;
+}
+.textarea{
+    width: 90%;
+    padding: 6px 12px;
+    border: none;
+    border-bottom: 2px solid #b7b7b7;
+    background-color: #e5e5e5;
+    border-radius: 6px;
+    color: #000000;
+}
+.textarea:focus{
+    outline: none;
+    border-color: #4f4f4f;
+}
+.input{
+    width: 90%;
+    padding: 8px;
+    border: none;
+    border-bottom: 2px solid #b7b7b7;
+    background-color: #e5e5e5;
+    border-radius: 6px;
+    color: #000000;
+}
+.input:focus{
+    outline: none;
+    border-color: #4f4f4f;
+}
