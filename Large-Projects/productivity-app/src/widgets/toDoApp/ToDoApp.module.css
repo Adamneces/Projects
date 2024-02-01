@@ -1,9 +1,9 @@
 .appContainer{
-    display: flex;
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    grid-template-rows: repeat(28, 1fr);
     width: 47%;
-    border: solid red;
-    height: 100vh;
+    height: 720px;
     position: relative;
-
+    gap: 12px;
 } 

@@ -1,11 +1,7 @@
 .container{
-    width: 300px;
-    height: 210px;
     border-radius: 10px;
-    position: absolute;
-    left: 510px;
-    top: 490px;
-    background-color: rgb(40,40,40);
+    grid-area: 20/13/29/20;
+    background-color: rgb(45,45,45);
     color: white;
     padding: 15px 20px;
 }
@@ -28,7 +24,7 @@
     padding: 0;
     height: 25px;
     border-radius: 8px;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 .progressBar{
     background: green;
