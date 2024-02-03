@@ -1,15 +1,28 @@
-import React from 'react'
-import styles from './HabitTrackerBody.module.css'
-import Habit from './bodyComponents/Habit'
+import React from 'react';
+import styles from './HabitTrackerBody.module.css';
+import Habit from './bodyComponents/Habit';
+import HabitForm from './bodyComponents/HabitForm';
+import Checkbox from './bodyComponents/Checkbox';
 
-const HabitTrackerBody = ({habits}) => {
+const HabitTrackerBody = ({ habits }) => {
   return (
     <div className={styles.body}>
       {habits.map((habit) => {
-        return <Habit key={habit.name} name={habit.name} frequency={habit.frequency} />
+        return (
+          <Habit key={habit.name} name={habit.name} habits={habits}>
+            {habit.trackHabitOn.map((day) => (
+              <Checkbox
+                key={day}
+                className={styles.checkbox}
+                day={day}
+              />
+            ))}
+          </Habit>
+        );
       })}
+      <HabitForm />
     </div>
-  )
-}
+  );
+};
 
-export default HabitTrackerBody
+export default HabitTrackerBody;

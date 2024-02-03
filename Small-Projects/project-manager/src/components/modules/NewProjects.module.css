@@ -17,7 +17,8 @@
     color: #3a3a3a;
 }
 .cancelBtn:hover{
-    color: #020202;
+    color: #000000;
+    cursor: pointer;
 }
 .saveBtn{
     padding: 6px 12px;
@@ -27,4 +28,8 @@
     border: none;
     border-radius: 6px;
     margin: 8px 24px;
+}
+.saveBtn:hover{
+    cursor: pointer;
+    text-decoration: underline;
 }
