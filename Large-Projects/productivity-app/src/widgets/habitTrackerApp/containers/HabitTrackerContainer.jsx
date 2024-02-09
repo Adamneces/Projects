@@ -3,11 +3,11 @@ import style from './HabitTrackerContainer.module.css'
 import HabitTrackerHeader from '../components/HabitTrackerHeader'
 import HabitTrackerBody from '../components/HabitTrackerBody'
 
-const HabitTrackerContainer = ({habits}) => {
+const HabitTrackerContainer = ({habits, handleNewHabit}) => {
   return (
     <div className={style.container}>
       <HabitTrackerHeader />
-      <HabitTrackerBody habits={habits} />
+      <HabitTrackerBody handleNewHabit={handleNewHabit} habits={habits} />
     </div>
   )
 }

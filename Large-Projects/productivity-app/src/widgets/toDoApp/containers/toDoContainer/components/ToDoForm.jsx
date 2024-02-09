@@ -38,7 +38,6 @@ const ToDoForm = (props) => {
     setShowForm(false);
     setColor('rgb(44, 44, 44)');
     setPriority('rgb(44, 44, 44)');
-    console.log(newTask);
   }
 
   function handleNewTaskChange(key, event) {

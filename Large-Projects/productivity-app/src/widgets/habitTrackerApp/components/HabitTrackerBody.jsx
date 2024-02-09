@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './HabitTrackerBody.module.css';
 import Habit from './bodyComponents/Habit';
-import HabitForm from './bodyComponents/HabitForm';
-import Checkbox from './bodyComponents/Checkbox';
+import HabitForm from './bodyComponents/HabitForm.jsx'
+import Checkbox from './bodyComponents/Checkbox.jsx';
 
-const HabitTrackerBody = ({ habits }) => {
+const HabitTrackerBody = ({ habits, handleNewHabit }) => {
   return (
     <div className={styles.body}>
       {habits.map((habit) => {
@@ -20,7 +20,7 @@ const HabitTrackerBody = ({ habits }) => {
           </Habit>
         );
       })}
-      <HabitForm />
+      <HabitForm handleNewHabit={handleNewHabit} />
     </div>
   );
 };

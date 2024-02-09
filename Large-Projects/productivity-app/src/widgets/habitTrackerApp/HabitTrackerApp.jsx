@@ -4,12 +4,14 @@ import HabitTrackerContainer from "./containers/HabitTrackerContainer";
 
 const HabitTrackerApp = () => {
   const initialDays = ["mo", "tu", "we", "th", "fr", "sa", "su"];
-  const [habits, setHabit] = useState([
-    {
-      name: "Vitamíny",
-      trackHabitOn: ['mo', 'we', 'su'],
-    },
-  ]);
+  const [habits, setHabit] = useState([]);
+
+  function handleNewHabit(habit) {
+    setHabit((prev) => {
+      return [...prev, habit];
+    });
+  }
+
 
   const habitsWithDisabledDays = habits.map((habit) => {
     const habitDays = initialDays.map((day) => {
@@ -24,7 +26,10 @@ const HabitTrackerApp = () => {
 
   return (
     <div className={styles.container}>
-      <HabitTrackerContainer habits={habitsWithDisabledDays} />
+      <HabitTrackerContainer
+        handleNewHabit={handleNewHabit}
+        habits={habitsWithDisabledDays}
+      />
     </div>
   );
 };

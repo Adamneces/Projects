@@ -58,8 +58,7 @@ const InfoWidget = () => {
     const dayOfWeek = daysOfWeek[dateObj.getDay()];
     return dayOfWeek;
   };
-
-  console.log(weatherData);
+  
   return (
     <div className={styles.container}>
       {weatherData ? (
