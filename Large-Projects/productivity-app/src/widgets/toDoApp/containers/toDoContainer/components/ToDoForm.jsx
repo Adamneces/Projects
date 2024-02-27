@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import styles from './ToDoForm.module.css';
-import backgroundColors from './utilities/backgroundColors';
+import styles from '../ToDo.module.css';
+import backgroundColors from '../../../utilities/backgroundColors';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker';
@@ -73,7 +73,7 @@ const ToDoForm = (props) => {
   return (
     <>
       {showForm ? (
-        <form className={styles.formContainer} onSubmit={handleSubmit}>
+        <form className={styles.toDoForm_formContainer} onSubmit={handleSubmit}>
           <input
             onChange={(event) => handleNewTaskChange('task', event)}
             name='task'
@@ -83,10 +83,10 @@ const ToDoForm = (props) => {
             required
             placeholder="What's the task?"
             maxLength={70}
-            className={styles.firstInput}
+            className={styles.toDoForm_firstInput}
           />
           <textarea
-            className={styles.textarea}
+            className={styles.toDoForm_textarea}
             onChange={(event) => handleNewTaskChange('description', event)}
             name='description'
             type='text'
@@ -94,23 +94,23 @@ const ToDoForm = (props) => {
             placeholder='Description...'
             maxLength={140}setShowCalendar
           />
-          <div className={styles.inputGroup}>
+          <div className={styles.toDoForm_inputGroup}>
             <label htmlFor="time">Set time?</label>
             <input
               onChange={(event) => handleNewTaskChange('time', event)}
               name='time'
               type='time'
               value={newTask.time}
-              className={styles.input}
+              className={styles.toDoForm_input}
               style={{ backgroundColor: 'rgb(44, 44, 44)' }}
             />
           </div>
 
-          <div className={styles.inputGroup}>
+          <div className={styles.toDoForm_inputGroup}>
             <label htmlFor="date">Set date?</label>
-            <div className={styles.btnContainer}>
+            <div className={styles.toDoForm_btnContainer}>
             <input
-              className={styles.dateButton}
+              className={styles.toDoForm_dateButton}
               type="button"
               onClick={() => setShowCalendar(!showCalendar)}
               style={{ display: showCalendar ? 'none' : 'block' }}
@@ -120,7 +120,7 @@ const ToDoForm = (props) => {
             />
             {showCalendar && (
             <DatePicker
-            className={styles.datepicker} 
+            className={styles.toDoForm_datepicker} 
             selected={selectedDate} 
             onChange={handleDateChange} 
             minDate={new Date()}
@@ -130,7 +130,7 @@ const ToDoForm = (props) => {
             </div>
           </div>
 
-          <div className={styles.inputGroup}>
+          <div className={styles.toDoForm_inputGroup}>
             <label htmlFor="color">color:</label>
             <select
               onChange={(event) => handleNewTaskChange('color', event)}
@@ -139,7 +139,7 @@ const ToDoForm = (props) => {
               id='color'
               value={newTask.color}
               style={{ backgroundColor: color }}
-              className={styles.input}
+              className={styles.toDoForm_input}
             >
               <option value="default">default</option>
               <option value='green'>green</option>
@@ -149,7 +149,7 @@ const ToDoForm = (props) => {
               <option value="brown">brown</option>
             </select>
           </div>
-          <div className={styles.inputGroup}>
+          <div className={styles.toDoForm_inputGroup}>
             <label htmlFor="priority">priority:</label>
             <select
             onChange={(event) => handleNewTaskChange('priority', event)}
@@ -157,7 +157,7 @@ const ToDoForm = (props) => {
             name='priority'
             id='priority'
             value={newTask.priority}
-            className={styles.input}
+            className={styles.toDoForm_input}
             style={{ border:`2px solid ${priority}`, backgroundColor: 'rgb(44, 44, 44)' }}
           >
             <option value="nopriority">doesn't matter</option>
@@ -167,14 +167,14 @@ const ToDoForm = (props) => {
           </select>
           </div>
           
-          <div className={styles.submit_closeButton_container}>
+          <div className={styles.toDoForm_submit_closeButton_container}>
             <button 
               type='submit'
-              className={styles.submitButton}
+              className={styles.toDoForm_submitButton}
             >submit</button>
             <button
               onClick={() => setShowForm(false)}
-              className={styles.formCloseButton}
+              className={styles.toDoForm_formCloseButton}
             >
               close
             </button>
@@ -183,9 +183,9 @@ const ToDoForm = (props) => {
       ) : (
         <div 
         onClick={() => setShowForm(true)}
-        className={styles.createTaskButtonContainer}>
+        className={styles.toDoForm_createTaskButtonContainer}>
           <FontAwesomeIcon icon={faPlus}  
-            className={styles.createTaskButton}
+            className={styles.toDoForm_createTaskButton}
           />
         </div>
       )}

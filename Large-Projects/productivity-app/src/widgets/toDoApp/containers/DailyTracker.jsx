@@ -1,61 +1,49 @@
-import React from 'react'
-import styles from './DailyTracker.module.css'
+import React from "react";
+import styles from "../ToDoApp.module.css";
+import TrackingBar from "../UI/TrackingBar";
+import { isSameDay } from "../utilities/utilities";
 
-const DailyTracker = ({toDos, isSameDay}) => {
-
+const DailyTracker = ({ toDos }) => {
   const today = new Date();
-  const todaysTasks = toDos.filter((task) => {
-    const taskDate = new Date(task.date);
-    return isSameDay(taskDate, today);
-  });
+  const todaysTasks = toDos.filter((task) => isSameDay(new Date(task.date), today));
   const completedTasks = todaysTasks.filter((task) => task.taskIsDone);
 
-  function filterPriority(tasks, priority){
-    return tasks.filter((task) => task.priority === priority);
-  }
+  const priorities = ["high", "medium", "low", "nopriority"];
 
-  const progress = (completedTasks.length / todaysTasks.length) * 100
+  const getPriorityCount = (priority) => {
+    const completedCount = completedTasks.filter((task) => task.priority === priority).length;
+    const totalCount = todaysTasks.filter((task) => task.priority === priority).length;
+    return `${completedCount}/${totalCount}`;
+  };
+
+  const progress = (completedTasks.length / todaysTasks.length) * 100;
 
   return (
-    <div className={styles.container}>
-      <div className={styles.headingContainer}>
-        <span>Today's tasks:</span>
-        <span>{completedTasks.length}/{todaysTasks.length}</span>
-      </div>
-      <div className={styles.lineContainer}>
-        <span>High Priority:</span>
-        <span>{filterPriority(completedTasks, 'high').length}/{filterPriority(todaysTasks, 'high').length}</span>
-      </div>
-      <div className={styles.lineContainer}>
-        <span>Medium Priority:</span>
-        <span>{filterPriority(completedTasks, 'medium').length}/{filterPriority(todaysTasks, 'medium').length}</span>
-      </div>
-      <div className={styles.lineContainer}>
-        <span>Low Priority:</span>
-        <span>{filterPriority(completedTasks, 'low').length}/{filterPriority(todaysTasks, 'low').length}</span>
-      </div>
-      <div className={styles.lineContainer}>
-        <span>No Priority:</span>
-        <span>{filterPriority(completedTasks, 'nopriority').length}/{filterPriority(todaysTasks, 'nopriority').length}</span>
-      </div>
-      <div className={styles.progressContainer}>
-        <div 
-        className={`${styles.progressBar} ${progress > 99.9 ? styles.everythingCompleted : ''}`}
-        style={{
-          width: `${progress}%`,
-          background:
-          progress < 25
-             ? 'red'
-             : progress < 50
-             ? 'orange'
-             : progress < 75
-             ? 'yellow'
-             : 'green'
-        }}
+    <div className={styles.daily_tracker_container}>
+      <TrackingBar fontSize="19px" margin="10px" className={styles.daily_tracker_lineContainer} label="Today's tasks:">
+        {completedTasks.length}/{todaysTasks.length}
+      </TrackingBar>
+
+      {priorities.map((priority) => (
+        <TrackingBar key={priority} className={styles.daily_tracker_lineContainer} label={`${priority.charAt(0).toUpperCase() + priority.slice(1)} Priority:`}>
+          {getPriorityCount(priority)}
+        </TrackingBar>
+      ))}
+
+      <div className={styles.daily_tracker_progressContainer}>
+        <div
+          className={`${styles.daily_tracker_progressBar} ${
+            progress > 99.9 ? styles.daily_tracker_everythingCompleted : ""
+          }`}
+          style={{
+            width: `${progress ? progress : "0"}%`,
+            background:
+              progress < 25 ? "red" : progress < 50 ? "orange" : progress < 75 ? "yellow" : "green",
+          }}
         ></div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DailyTracker
+export default DailyTracker;

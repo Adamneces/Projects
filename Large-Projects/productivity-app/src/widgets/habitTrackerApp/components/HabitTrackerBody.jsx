@@ -1,26 +1,37 @@
 import React from 'react';
-import styles from './HabitTrackerBody.module.css';
+import styles from '../HabitTrackerApp.module.css';
 import Habit from './bodyComponents/Habit';
-import HabitForm from './bodyComponents/HabitForm.jsx'
 import Checkbox from './bodyComponents/Checkbox.jsx';
 
-const HabitTrackerBody = ({ habits, handleNewHabit }) => {
+const HabitTrackerBody = ({ habits }) => {
+  const daysSample = ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'];
   return (
-    <div className={styles.body}>
-      {habits.map((habit) => {
+    <div className={styles.habit_tracker_body}>
+      {(habits.length !== 0) ? habits.map((habit) => {
         return (
-          <Habit key={habit.name} name={habit.name} habits={habits}>
-            {habit.trackHabitOn.map((day) => (
+          <Habit key={habit.name} name={habit.name} color={habit.color}>
+            {habit.trackHabitOn.map((day, index) => (
               <Checkbox
-                key={day}
+                key={`${habit.name}-${day}-${index}`}
                 className={styles.checkbox}
                 day={day}
               />
             ))}
           </Habit>
         );
-      })}
-      <HabitForm handleNewHabit={handleNewHabit} />
+      }) : 
+        <Habit name={'Habit name...'} color={'rgb(60,60,60)'}>
+          {daysSample.map((day) => {
+            return (
+              <Checkbox
+                key={day}
+                className={styles.checkbox}
+                day={day}
+              />
+            );
+          })}
+        </Habit>
+      }
     </div>
   );
 };

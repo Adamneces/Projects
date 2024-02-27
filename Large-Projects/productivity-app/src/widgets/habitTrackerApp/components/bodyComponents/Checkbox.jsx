@@ -1,19 +1,22 @@
 import React from "react";
+import styles from "../../HabitTrackerApp.module.css";
 
 const Checkbox = ({ day }) => {
   return (
-    <div>
+    <div className={styles.checkbox_inputContainer}>
       {day ? (
         <input
-          style={{
-            width: "18px",
-            height: "18px",
-          }}
+          className={styles.checkbox_input}
           type="checkbox"
           name={day}
         />
       ) : (
-        <span style={{ color: "white" }}>-</span>
+        <input
+          type="checkbox"
+          name={day}
+          className={styles.checkbox_input}
+          disabled
+        />
       )}
     </div>
   );

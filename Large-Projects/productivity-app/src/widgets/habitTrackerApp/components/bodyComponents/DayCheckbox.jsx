@@ -17,7 +17,7 @@ const DayCheckbox = ({ label, value, onChange, checked }) => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
       <label>{label}</label>
       <input
         type="checkbox"

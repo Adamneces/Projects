@@ -1,14 +1,27 @@
 import React, { useState, useRef } from "react";
-import styles from "./HabitForm.module.css";
+import styles from "../../HabitTrackerApp.module.css";
 import DayCheckbox from "./DayCheckbox";
+import {
+  daysLabels,
+  days,
+  selectColors,
+  removeDuplicates,
+  sortDaysInArray,
+  renderSelectedDaysText,
+} from "../../utilities/utilities.js";
 
-const HabitForm = ({ handleNewHabit }) => {
+const HabitForm = ({ handleNewHabit, onCloseForm }) => {
   const dialog = useRef();
+  const [expandedDays, setExpandedDays] = useState(false);
   const [habit, setHabit] = useState({
     name: "",
     trackHabitOn: [],
     description: "",
+    color: "",
   });
+  let selectedDays = habit.trackHabitOn;
+  let filteredSelectedDays =
+    removeDuplicates(selectedDays).sort(sortDaysInArray);
 
   function handleSubmit(event) {
     if (habit.trackHabitOn.length === 0) {
@@ -25,6 +38,7 @@ const HabitForm = ({ handleNewHabit }) => {
       trackHabitOn: [],
       description: "",
     });
+    onCloseForm(false);
   }
 
   function handleHabitChange(part, e) {
@@ -47,21 +61,41 @@ const HabitForm = ({ handleNewHabit }) => {
       }));
     }
   }
+  function handleAllDaysCheckboxChange(days, isChecked) {
+    if (isChecked) {
+      setHabit((prevHabit) => ({
+        ...prevHabit,
+        trackHabitOn: [...prevHabit.trackHabitOn, ...days],
+      }));
+    } else {
+      setHabit((prevHabit) => ({
+        ...prevHabit,
+        trackHabitOn: prevHabit.trackHabitOn.filter((d) => !days.includes(d)),
+      }));
+    }
+  }
 
   function handleCloseDialog() {
     dialog.current.close();
   }
 
   return (
-    <div>
-      <dialog className={styles.dialog} ref={dialog}>
+    <div className={styles.habit_form_habitFormContainer}>
+      <dialog className={styles.habit_form_dialog} ref={dialog}>
         <p>Please select at least one day</p>
-        <button className={styles.dialogBtn} onClick={handleCloseDialog}>
+        <button
+          className={styles.habit_form_dialogBtn}
+          onClick={handleCloseDialog}
+        >
           Close
         </button>
       </dialog>
-      <form onSubmit={(event) => handleSubmit(event)} className={styles.form}>
+      <form
+        onSubmit={(event) => handleSubmit(event)}
+        className={styles.habit_form_form}
+      >
         <input
+          className={styles.habit_form_inputs}
           required
           onChange={(e) => handleHabitChange("name", e)}
           type="text"
@@ -70,60 +104,86 @@ const HabitForm = ({ handleNewHabit }) => {
           value={habit.name}
         />
         <textarea
+          className={styles.habit_form_inputs}
           onChange={(e) => handleHabitChange("description", e)}
           name="description"
           placeholder="Description"
           value={habit.description}
         />
-        <div className={styles.daysContainer}>
-          <div className={styles.individualDaysContainer}>
-            <DayCheckbox
-              label="Monday"
-              value="mo"
-              onChange={(isChecked) => handleDayCheckboxChange("mo", isChecked)}
-              checked={habit.trackHabitOn.includes("mo")}
-            />
-            <DayCheckbox
-              label="Tuesday"
-              value="tu"
-              onChange={(isChecked) => handleDayCheckboxChange("tu", isChecked)}
-              checked={habit.trackHabitOn.includes("tu")}
-            />
-            <DayCheckbox
-              label="Wednesday"
-              value="we"
-              onChange={(isChecked) => handleDayCheckboxChange("we", isChecked)}
-              checked={habit.trackHabitOn.includes("we")}
-            />
-            <DayCheckbox
-              label="Thursday"
-              value="th"
-              onChange={(isChecked) => handleDayCheckboxChange("th", isChecked)}
-              checked={habit.trackHabitOn.includes("th")}
-            />
-          </div>
-          <div className={styles.individualDaysContainer}>
-            <DayCheckbox
-              label="Friday"
-              value="fr"
-              onChange={(isChecked) => handleDayCheckboxChange("fr", isChecked)}
-              checked={habit.trackHabitOn.includes("fr")}
-            />
-            <DayCheckbox
-              label="Saturday"
-              value="sa"
-              onChange={(isChecked) => handleDayCheckboxChange("sa", isChecked)}
-              checked={habit.trackHabitOn.includes("sa")}
-            />
-            <DayCheckbox
-              label="Sunday"
-              value="su"
-              onChange={(isChecked) => handleDayCheckboxChange("su", isChecked)}
-              checked={habit.trackHabitOn.includes("su")}
-            />
+        <div className={styles.habit_form_selectColorContainer}>
+          <label>Select Color:</label>
+          <select
+            onChange={(e) => handleHabitChange("color", e)}
+            style={{ background: habit.color }}
+            className={styles.habit_form_colorDropDown}
+          >
+            {Object.entries(selectColors).map(([colorName, hexCode]) => (
+              <option key={hexCode} value={hexCode}>
+                {colorName}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div
+          style={{ borderRadius: expandedDays ? "10px 10px 0 0" : "10px" }}
+          className={styles.habit_form_labelButtonContainer}
+        >
+          <label>Track habit on:</label>
+          <div
+            onClick={()=> setExpandedDays(prev => !prev)}
+            className={styles.habit_form_daysButton}
+          >
+            {renderSelectedDaysText(filteredSelectedDays)}
           </div>
         </div>
-        <button type="submit">Add</button>
+        <div className={styles.habit_form_daysContainer}>
+          <div
+            style={{ visibility: expandedDays ? "visible" : "hidden" }}
+            className={styles.habit_form_individualDaysContainer}
+          >
+            <DayCheckbox
+              label="Select all days"
+              value=""
+              onChange={(isChecked) =>
+                handleAllDaysCheckboxChange(days.allDays, isChecked)
+              }
+              checked={habit.trackHabitOn === days.allDays}
+            />
+            <DayCheckbox
+              label="Select all weekdays"
+              value=""
+              onChange={(isChecked) =>
+                handleAllDaysCheckboxChange(days.weekDays, isChecked)
+              }
+              checked={habit.trackHabitOn === days.allDays}
+            />
+            <br />
+            {daysLabels.map((day) => {
+              return (
+                <DayCheckbox
+                  key={day.label}
+                  label={day.label}
+                  value={day.value}
+                  onChange={(isChecked) =>
+                    handleDayCheckboxChange(day.value, isChecked)
+                  }
+                  checked={habit.trackHabitOn.includes(day.value)}
+                />
+              );
+            })}
+          </div>
+        </div>
+        <div className={styles.habit_form_buttonsContainer}>
+          <button className={styles.habit_form_submitButton} type="submit">
+            Add Habit
+          </button>
+          <button
+            className={styles.habit_form_closeButton}
+            onClick={() => onCloseForm(false)}
+          >
+            Close
+          </button>
+        </div>
       </form>
     </div>
   );

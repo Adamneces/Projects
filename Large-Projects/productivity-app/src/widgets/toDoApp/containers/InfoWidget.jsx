@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import styles from './InfoWidget.module.css';
+import styles from '../ToDoApp.module.css';
 
 const InfoWidget = () => {
+
   const [weatherData, setWeatherData] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
 
-  const apiKey = '85db84b7df32425a852135626242001';
+  const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
   const baseUrl = 'http://api.weatherapi.com/v1';
   const endpoint = '/forecast.json';
 
@@ -34,7 +35,7 @@ const InfoWidget = () => {
               if (userLocation) {
                 apiUrl = `${baseUrl}${endpoint}?key=${apiKey}&q=${userLocation.latitude},${userLocation.longitude}&days=3&aqi=no&alerts=no`;
               } else {
-                apiUrl = `${baseUrl}${endpoint}?key=${apiKey}&q=Florence&days=3&aqi=no&alerts=no`;
+                apiUrl = `${baseUrl}${endpoint}?key=${apiKey}&q=Torrevieja&days=3&aqi=no&alerts=no`;
               }      
               const response = await fetch(apiUrl);
         
@@ -60,22 +61,22 @@ const InfoWidget = () => {
   };
   
   return (
-    <div className={styles.container}>
+    <div className={styles.info_widget_container}>
       {weatherData ? (
         <>
-          <h1 className={styles.heading}>{weatherData.location.name} - {weatherData.location.country}</h1>
-          <div className={styles.infoContainer}>
-            <p className={styles.currentTemperature}>{weatherData.current.temp_c}°C</p>
-            <img className={styles.icon} src={weatherData.current.condition.icon} alt="Current Weather Icon" />
+          <h1 className={styles.info_widget_heading}>{weatherData.location.name} - {weatherData.location.country}</h1>
+          <div className={styles.info_widget_infoContainer}>
+            <p className={styles.info_widget_currentTemperature}>{weatherData.current.temp_c}°C</p>
+            <img className={styles.info_widget_icon} src={weatherData.current.condition.icon} alt="Current Weather Icon" />
           </div>
-          <div className={styles.forecastContainer}>
+          <div className={styles.info_widget_forecastContainer}>
             {weatherData.forecast.forecastday.map((forecastDay, index) => (
-              <div className={styles.forecastDayContainer} key={index}>
-                <div className={styles.forecast_day_icon}>
-                  <p className={styles.forecastDay}>{getDayOfWeek(forecastDay.date)}</p>
-                  <img className={styles.forecastIcon} src={forecastDay.day.condition.icon} alt="Forecast Weather Icon" />
+              <div className={styles.info_widget_forecastDayContainer} key={index}>
+                <div className={styles.info_widget_forecast_day_icon}>
+                  <p className={styles.info_widget_forecastDay}>{getDayOfWeek(forecastDay.date)}</p>
+                  <img className={styles.info_widget_forecastIcon} src={forecastDay.day.condition.icon} alt="Forecast Weather Icon" />
                 </div>
-                <span className={styles.forecastTemp}><span className={styles.minTemp}>{forecastDay.day.mintemp_c}</span>/{forecastDay.day.maxtemp_c}</span>
+                <span className={styles.info_widget_forecastTemp}><span className={styles.minTemp}>{forecastDay.day.mintemp_c}</span>/{forecastDay.day.maxtemp_c}</span>
               </div>
             ))}
           </div>

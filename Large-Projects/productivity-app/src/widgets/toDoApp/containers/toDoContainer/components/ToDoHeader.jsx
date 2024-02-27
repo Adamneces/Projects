@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import styles from './ToDoHeader.module.css';
+import styles from '../ToDo.module.css';
 
 const ToDoHeader = ({setDisplayTasks, setFilterTasks}) => {
 
   return (
-    <nav className={styles.header}>
-      <h1 className={styles.heading}>To-Do List</h1>
+    <nav className={styles.ToDoHeader_header}>
+      <h1 className={styles.ToDoHeader_heading}>To-Do List</h1>
       <select 
       name="filterBy" 
       id="filterBy"
       onChange={(e) => setFilterTasks(e.target.value)}
-      className={styles.dropdown}
+      className={styles.ToDoHeader_dropdown}
       >
         <option value="priority">Priority</option>
         <option value="time">Time</option>
@@ -19,7 +19,7 @@ const ToDoHeader = ({setDisplayTasks, setFilterTasks}) => {
       name="displayTasks" 
       id="displayTasks" 
       onChange={(e) => setDisplayTasks(e.target.value)}
-      className={styles.dropdown}
+      className={styles.ToDoHeader_dropdown}
       >
         <option value="today">Today</option>
         <option value="tomorrow">Tomorrow</option>
