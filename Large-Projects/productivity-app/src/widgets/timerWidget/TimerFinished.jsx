@@ -1,10 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styles from "./TimerWidget.module.css"
+import TimerContext from './store/TimerContext';
 
-const TimerFinished = ({setTimerFinished, setRounds}) => {
+const TimerFinished = () => {
+const {setTimerStats} = useContext(TimerContext);
+
 function handleGoBack() {
-  setTimerFinished(false);
-  setRounds(1);
+  setTimerStats((prev) => {
+    return {
+      ...prev,
+      timerFinished: false,
+      rounds: 1,
+    }
+  })
 }
 
   return (

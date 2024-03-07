@@ -34,13 +34,10 @@
 .daily_tracker_progressContainer{
     width: 100%;
     padding: 0;
-    height: 25px;
     border-radius: 8px;
     margin-top: 15px;
 }
 .daily_tracker_progressBar{
-    background: green;
-    width: 40%;
     margin: 0;
     height: 100%;
     border-radius: 8px;

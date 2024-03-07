@@ -1,29 +1,35 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./TimerWidget.module.css";
 import { iconLeft, iconRight } from "./utilities/utilities";
 import Button from "./UI/Button";
 
-const Rounds = ({
-  rounds,
-  setRounds,
-  userRounds,
-  setUserRounds,
-  isBreakActive,
-  isTimerActive,
-}) => {
+import TimerContext from "./store/TimerContext";
+
+const Rounds = () => {
+  const { setTimerStats, timerStats } = useContext(TimerContext);
   const [isEditing, setIsEditing] = useState(false);
 
   function toggleEditing() {
     setIsEditing((prev) => !prev);
   }
 
-  function handleUserRounds(value){
-    if (userRounds >= 1 && userRounds <= 19){
-      if (value === 1){
-        setUserRounds(prev => prev + 1);
-      }else if (value === -1){
-        setUserRounds(prev => prev - 1);
-      }else{
+  function handleUserRounds(value) {
+    if (timerStats.userRounds >= 1 && timerStats.userRounds <= 19) {
+      if (value === 1) {
+        setTimerStats((prev) => {
+          return {
+            ...prev,
+            userRounds: prev.userRounds + 1,
+          };
+        });
+      } else if (value === -1) {
+        setTimerStats((prev) => {
+          return {
+            ...prev,
+            userRounds: prev.userRounds - 1,
+          };
+        });
+      } else {
         return;
       }
     }
@@ -34,27 +40,39 @@ const Rounds = ({
       <h4 className={styles.rounds_heading}>Rounds</h4>
       {isEditing ? (
         <div className={styles.rounds_inputIconsContainer}>
-          <button onClick={() => handleUserRounds(-1)}>
-            {iconLeft}
-          </button>
-          <span>{userRounds}</span>
-          <button onClick={() => handleUserRounds(1)}>
-            {iconRight}
-          </button>
+          <button onClick={() => handleUserRounds(-1)}>{iconLeft}</button>
+          <span>{timerStats.userRounds}</span>
+          <button onClick={() => handleUserRounds(1)}>{iconRight}</button>
         </div>
       ) : (
         <p className={styles.rounds_roundsDisplay}>
-          {rounds <= userRounds ? rounds : rounds - 1}/{userRounds}
+          {timerStats.rounds <= timerStats.userRounds
+            ? timerStats.rounds
+            : timerStats.rounds - 1}
+          /{timerStats.userRounds}
         </p>
       )}
       <div>
-        <Button onClick={toggleEditing}
-          disabled={isTimerActive || isBreakActive} color="blue" >
-            {isEditing ? "Save" : "Edit"}
+        <Button
+          onClick={toggleEditing}
+          disabled={timerStats.isTimerActive || timerStats.isBreakActive}
+          color="blue"
+        >
+          {isEditing ? "Save" : "Edit"}
         </Button>
-        <Button onClick={() => setRounds(1)}
-          disabled={isTimerActive || isBreakActive} color="yellow">
-            Reset
+        <Button
+          onClick={() =>
+            setTimerStats((prev) => {
+              return {
+                ...prev,
+                rounds: 1,
+              };
+            })
+          }
+          disabled={timerStats.isTimerActive || timerStats.isBreakActive}
+          color="yellow"
+        >
+          Reset
         </Button>
       </div>
     </div>

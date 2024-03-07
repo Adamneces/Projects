@@ -1,27 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "../TimerWidget.module.css";
 import SelectDropdown from "../timer/components/SelectDropDown";
 import { sixtyArray, hoursArray } from "../utilities/utilities.js";
 import Button from "../UI/Button.jsx";
 
-const BreakTimer = ({
-  setRounds,
-  setIsTimerActive,
-  rounds,
-  userRounds,
-  setTimerFinished,
-  isTimerActive,
-  isBreakActive,
-  setIsBreakActive,
-  setInitialValues,
-  initialValues,
-  handleBreakReset,
-  pickedSound,
-}) => {
+import TimerContext from "../store/TimerContext.jsx";
+
+const BreakTimer = () => {
+  const {timerStats, setTimerStats, initialValues, setInitialValues, handleBreakReset} = useContext(TimerContext); 
+
   const [breakTime, setBreakTime] = useState(initialValues.break);
   const [isEditing, setIsEditing] = useState(false);
 
-  const audio = pickedSound ? new Audio(pickedSound) : null;
+  const audio = timerStats.pickedSound ? new Audio(timerStats.pickedSound) : null;
 
   function toggleEditing() {
     setIsEditing((prev) => !prev);
@@ -38,13 +29,18 @@ const BreakTimer = ({
   }
 
   function toggleActive() {
-    setIsBreakActive((prev) => !prev);
+    setTimerStats((prev) => {
+      return {
+     ...prev,
+        isBreakActive:!prev.isBreakActive,
+      };
+    })
   }
 
   useEffect(() => {
     let interval;
 
-    if (isBreakActive) {
+    if (timerStats.isBreakActive) {
       document.title = `Break - ${
         breakTime.hours > 0 ? breakTime.hours + ":" : ""
       }${
@@ -58,7 +54,7 @@ const BreakTimer = ({
       document.title = "Productivity Manager";
     }
 
-    if (isBreakActive) {
+    if (timerStats.isBreakActive) {
       interval = setInterval(() => {
         setBreakTime((prevValue) => {
           const newSeconds =
@@ -75,21 +71,25 @@ const BreakTimer = ({
               : prevValue.hours;
 
           if (newSeconds < 1 && newMinutes < 1 && newHours < 1) {
-            if (rounds === userRounds) {
+            if (timerStats.rounds === timerStats.userRounds) {
               setBreakTime(initialValues.break);
             }
 
-            setIsTimerActive(rounds === userRounds ? false : true);
-            setRounds((prev) => prev + 1);
+            setTimerStats((prev) => {
+              return{
+                ...prev,
+                isTimerActive: prev.rounds === prev.userRounds ? false : true,
+                rounds: prev.rounds + 1,
+                timerFinished: prev.rounds === prev.userRounds ? true : false,
+                isBreakActive: false,
+              }
+            })
             handleBreakReset(setBreakTime);
             clearInterval(interval);
-            setTimerFinished(rounds === userRounds ? true : false);
-            setIsBreakActive(false);
             if (audio) {
               audio.play();
             }
           }
-
           return {
             seconds: newSeconds,
             minutes: newMinutes,
@@ -100,7 +100,7 @@ const BreakTimer = ({
     }
 
     return () => clearInterval(interval);
-  }, [breakTime, isBreakActive, rounds]);
+  }, [breakTime, timerStats]);
 
   return (
     <div className={styles.break_timer_container}>
@@ -139,13 +139,13 @@ const BreakTimer = ({
         <Button
           color="blue"
           onClick={toggleEditing}
-          disabled={isTimerActive || isBreakActive}
+          disabled={timerStats.isTimerActive || timerStats.isBreakActive}
         >
           {isEditing ? "Save" : "Edit"}
         </Button>
         <Button
           color="yellow"
-          disabled={isEditing || isTimerActive}
+          disabled={isEditing || timerStats.isTimerActive}
           onClick={() => handleBreakReset(setBreakTime)}
         >
           Reset
@@ -154,14 +154,14 @@ const BreakTimer = ({
           color="red"
           disabled={
             isEditing ||
-            isTimerActive ||
-            (!isTimerActive &&
-              !isBreakActive &&
+            timerStats.isTimerActive ||
+            (!timerStats.isTimerActive &&
+              !timerStats.isBreakActive &&
               breakTime === initialValues.break)
           }
           onClick={toggleActive}
         >
-          {isBreakActive ? "Stop" : "Resume"}
+          {timerStats.isBreakActive ? "Stop" : "Resume"}
         </Button>
       </div>
     </div>

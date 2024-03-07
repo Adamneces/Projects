@@ -1,35 +1,35 @@
-import React, { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { sounds } from "./utilities/sounds.js";
 import styles from "./TimerWidget.module.css";
 import Button from "./UI/Button.jsx";
+import TimerContext from "./store/TimerContext.jsx";
 
-const Sounds = ({ setPickedSound, pickedSound, isTimerActive, isBreakActive }) => {
+const Sounds = () => {
+  const { setTimerStats, timerStats } = useContext(TimerContext);
+
   const [isEditing, setIsEditing] = useState(false);
   const [audio, setAudio] = useState(new Audio());
 
   useEffect(() => {
-    // Update the audio source when the picked sound changes
-    setAudio(new Audio(pickedSound));
-  }, [pickedSound]);
-
-  function handleEdit() {
-    setIsEditing((prev) => !prev);
-  }
+    setAudio(new Audio(timerStats.pickedSound));
+  }, [timerStats.pickedSound]);
 
   function handleSoundChange(event) {
-    setPickedSound(event.target.value);
+    setTimerStats((prev) => {
+      return {
+     ...prev,
+        pickedSound: event.target.value,
+      };
+    })
   }
 
-  // Generate soundNames dynamically based on sounds object
   const soundNames = Object.fromEntries(
     Object.entries(sounds).map(([soundKey]) => [sounds[soundKey], soundKey])
   );
 
   useEffect(() => {
-    // Play the audio when the component mounts or when pickedSound changes
     audio.play().catch(error => console.error("Error playing audio: No audio selected"));
 
-    // Cleanup function to pause the audio when the component unmounts
     return () => {
       audio.pause();
       audio.currentTime = 0;
@@ -42,7 +42,7 @@ const Sounds = ({ setPickedSound, pickedSound, isTimerActive, isBreakActive }) =
     </option>
   ));
 
-  const displaySoundName = soundNames[pickedSound] || "No sound";
+  const displaySoundName = soundNames[timerStats.pickedSound] || "No sound";
 
   return (
     <div className={styles.sounds_container}>
@@ -50,7 +50,7 @@ const Sounds = ({ setPickedSound, pickedSound, isTimerActive, isBreakActive }) =
       {isEditing ? (
         <select
           className={styles.sounds_selectSound}
-          value={pickedSound ? pickedSound : ''}
+          value={timerStats.pickedSound ? timerStats.pickedSound : ''}
           onChange={(event) => handleSoundChange(event)}
         >
           <option value="">Select a sound</option>
@@ -59,7 +59,7 @@ const Sounds = ({ setPickedSound, pickedSound, isTimerActive, isBreakActive }) =
       ) : (
         <p className={styles.sounds_sound}>{displaySoundName}</p>
       )}
-      <Button color="blue" disabled={isTimerActive || isBreakActive} onClick={handleEdit} >
+      <Button color="blue" disabled={timerStats.isTimerActive || timerStats.isBreakActive} onClick={() => setIsEditing(prev => !prev)} >
       {isEditing ? "Save" : "Edit"}
       </Button>
     </div>

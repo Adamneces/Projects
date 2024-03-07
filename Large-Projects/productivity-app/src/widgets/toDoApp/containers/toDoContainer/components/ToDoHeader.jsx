@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import { useContext } from 'react';
 import styles from '../ToDo.module.css';
+import ToDoContext from '../store/ToDoContext';
 
-const ToDoHeader = ({setDisplayTasks, setFilterTasks}) => {
+const ToDoHeader = () => {
+  const {setDisplayTasks, setFilterTasks} = useContext(ToDoContext);
 
   return (
     <nav className={styles.ToDoHeader_header}>

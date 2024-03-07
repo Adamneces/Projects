@@ -1,3 +1,4 @@
+//Colors for the habit background
 export const selectColors = {
   Default: "",
   "Ocean Blue": "rgba(52, 152, 219, 0.75)",
@@ -12,12 +13,12 @@ export const selectColors = {
   "Sky Blue": "rgba(135, 206, 235, 0.75)",
 };
 
+//all the days for calculations, atd...
 export const days = {
   allDays: ["mo", "tu", "we", "th", "fr", "sa", "su"],
   weekDays: ["mo", "tu", "we", "th", "fr"],
   weekends: ["sa", "su"],
 };
-
 export const daysLabels = [
   { value: "mo", label: "Monday" },
   { value: "tu", label: "Tuesday" },
@@ -28,6 +29,7 @@ export const daysLabels = [
   { value: "su", label: "Sunday" },
 ];
 
+//helper functions....
 export function removeDuplicates(array) {
   const seenValues = new Set();
   const uniqueArray = array.filter((value) => {
@@ -46,6 +48,7 @@ export function sortDaysInArray(a, b) {
   return order[a] - order[b];
 }
 
+//function for what should be displayed on the button - based on what user selects
 export function renderSelectedDaysText(selectedDays) {
     const allDays = days.allDays;
     const weekDays = days.weekDays;
@@ -67,5 +70,35 @@ export function renderSelectedDaysText(selectedDays) {
       return "On weekends";
     } else {
       return `Every ${selectedDays.join(", ")}`;
+    }
+  }
+
+  //functions for checking/unchecking checkboxes
+
+  export function handleDayCheckboxChange(day, isChecked, setFunction, key) {
+    if (isChecked) {
+      setFunction((prevValue) => ({
+        ...prevValue,
+        [key]: [...prevValue[key], day], 
+      }));
+    } else {
+      setFunction((prevValue) => ({
+        ...prevValue,
+        [key]: prevValue[key].filter((d) => d !== day),
+      }));
+    }
+  }
+  
+  export function handleAllDaysCheckboxChange(days, isChecked, setFunction, key) {
+    if (isChecked) {
+      setFunction((prevValue) => ({
+        ...prevValue,
+        [key]: [...prevValue[key], ...days], 
+      }));
+    } else {
+      setFunction((prevValue) => ({
+        ...prevValue,
+        [key]: prevValue[key].filter((d) => !days.includes(d)),
+      }));
     }
   }

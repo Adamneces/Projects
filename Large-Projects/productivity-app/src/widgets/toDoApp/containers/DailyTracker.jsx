@@ -2,6 +2,7 @@ import React from "react";
 import styles from "../ToDoApp.module.css";
 import TrackingBar from "../UI/TrackingBar";
 import { isSameDay } from "../utilities/utilities";
+import ProgressBar from "../UI/ProgressBar";
 
 const DailyTracker = ({ toDos }) => {
   const today = new Date();
@@ -29,19 +30,7 @@ const DailyTracker = ({ toDos }) => {
           {getPriorityCount(priority)}
         </TrackingBar>
       ))}
-
-      <div className={styles.daily_tracker_progressContainer}>
-        <div
-          className={`${styles.daily_tracker_progressBar} ${
-            progress > 99.9 ? styles.daily_tracker_everythingCompleted : ""
-          }`}
-          style={{
-            width: `${progress ? progress : "0"}%`,
-            background:
-              progress < 25 ? "red" : progress < 50 ? "orange" : progress < 75 ? "yellow" : "green",
-          }}
-        ></div>
-      </div>
+      <ProgressBar height={'25px'} progress={progress} />
     </div>
   );
 };

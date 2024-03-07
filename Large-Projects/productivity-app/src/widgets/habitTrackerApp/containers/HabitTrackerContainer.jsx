@@ -13,13 +13,19 @@ const HabitTrackerContainer = ({ habits, handleNewHabit }) => {
       {showForm ? (
         <HabitForm onCloseForm={setShowForm} handleNewHabit={handleNewHabit} />
       ) : (
-        <HabitTrackerBody onShowForm={setShowForm} handleNewHabit={handleNewHabit} habits={habits} />
+        <HabitTrackerBody
+          onShowForm={setShowForm}
+          handleNewHabit={handleNewHabit}
+          habits={habits}
+        />
       )}
       <button
-        style={{display: showForm ? 'none' : 'flex' }}
+        style={{ display: showForm ? "none" : "flex" }}
         className={styles.habit_tracker_container_showFormButton}
         onClick={() => setShowForm(true)}
-      >+</button>
+      >
+        +
+      </button>
     </div>
   );
 };

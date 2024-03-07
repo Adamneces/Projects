@@ -88,6 +88,7 @@
   border-radius: 6px;
   background-color: rgb(63, 63, 63);
   margin-right: 20px;
+  box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.192);
   transition: background-color 0.3s ease;
 }
 .timer-finished-backButton:hover{
@@ -152,9 +153,8 @@
   justify-content: space-evenly;
   align-items: center;
 }
-.rounds_inputIconsContainer input{
-  padding: 4px 0px;
-  text-align: center;
+.rounds_inputIconsContainer span{
+  padding: 2px 24px;
   border-radius: 6px;
   border: none;
   background-color: rgb(99, 99, 99);

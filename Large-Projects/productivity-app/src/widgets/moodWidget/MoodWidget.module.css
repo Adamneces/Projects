@@ -1,0 +1,53 @@
+.container{
+   width: 335px;
+   height: 200px;
+   border-radius: 12px;
+   margin: 15px 0 0 15px;
+   padding: 5px 20px;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-evenly;
+}
+.heading{
+    font-size: 24px;
+    color: white;
+    letter-spacing: 1px;
+}
+.return{
+    position: absolute;
+    margin-top: 130px;
+    margin-left: -15px;
+}
+.emojiContainer{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+.emoji{
+    font-size: 40px;
+    filter: grayscale(0.5);
+}
+.emoji:hover{
+    filter: grayscale(0);
+}
+.emoji:active{
+    filter: contrast(1.5);
+}
+/*--------------------------------------------------------------*/
+.selectedEmojiContainer{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.selectedEmoji_emoji{
+    font-size: 60px;
+    margin: 0;
+}
+.selectedEmojiParagraph{
+    font-size: 30px;
+    color: white;
+    margin: 0;
+}

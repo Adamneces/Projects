@@ -1,37 +1,23 @@
-import React, {useState} from 'react'
+import React, { useState } from "react";
 import styles from "./ToDo.module.css";
 
-import ToDoHeader from './components/ToDoHeader';
-import ToDoBody from './components/ToDoBody';
-import ToDoForm from './components/ToDoForm';
+import ToDoHeader from "./components/ToDoHeader";
+import ToDoBody from "./components/ToDoBody";
+import ToDoForm from "./components/ToDoForm/ToDoForm";
+
+import { ToDoProvider } from "./store/ToDoContext";
 
 const ToDo = (props) => {
-  const [displayTasks, setDisplayTasks] = useState('today');
-  const [filterTasks, setFilterTasks] = useState('priority');
-
-  function handleSetDisplayTasks(date) {
-    setDisplayTasks(date);
-  }
-
-  function handleNewTask(task){
-    props.setToDos((prev) => [...prev, task]);
-  }
 
   return (
     <div className={styles.ToDoContainer}>
-      <ToDoHeader 
-      setDisplayTasks={handleSetDisplayTasks} 
-      setFilterTasks={setFilterTasks}
-      />
-      <ToDoBody 
-      toDos={props.toDos} 
-      setToDos={props.setToDos}
-      displayTasks={displayTasks}
-      filterTasks={filterTasks}
-      />
-      <ToDoForm handleNewTask={handleNewTask} />
+      <ToDoProvider>
+        <ToDoHeader />
+        <ToDoBody toDos={props.toDos} setToDos={props.setToDos} />
+        <ToDoForm setToDos={props.setToDos} />
+      </ToDoProvider>
     </div>
-  )
-}
+  );
+};
 
-export default ToDo
+export default ToDo;

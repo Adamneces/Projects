@@ -1,36 +1,44 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "../TimerWidget.module.css";
 import SelectDropdown from "./components/SelectDropDown";
-import {
-  sixtyArray,
-  hoursArray,
-} from "../utilities/utilities.js";
+import { sixtyArray, hoursArray } from "../utilities/utilities.js";
 import Button from "../UI/Button.jsx";
 
-const Timer = ({
-  rounds,
-  isActive,
-  setIsActive,
-  userRounds,
-  setIsBreakActive,
-  isBreakActive,
-  setInitialValues,
-  handleTimerReset,
-  initialValues,
-  pickedSound,
-}) => {
+import TimerContext from "../store/TimerContext.jsx";
+
+const Timer = () => {
+  const {
+    timerStats,
+    setTimerStats,
+    initialValues,
+    setInitialValues,
+    handleTimerReset,
+  } = useContext(TimerContext);
+
   const [work, setWork] = useState(initialValues.timer);
   const [isEditing, setIsEditing] = useState(false);
 
-  const audio = pickedSound ? new Audio(pickedSound) : null;
+  const audio = timerStats.pickedSound
+    ? new Audio(timerStats.pickedSound)
+    : null;
 
   function toggleActive() {
-    setIsActive((prevValue) => !prevValue);
+    setTimerStats((prev) => {
+      return {
+        ...prev,
+        isTimerActive: !prev.isTimerActive,
+      };
+    });
   }
 
   function toggleEditing() {
     setIsEditing((prevValue) => !prevValue);
-    setIsActive(false);
+    setTimerStats((prev) => {
+      return {
+        ...prev,
+        isTimerActive: false,
+      };
+    });
 
     setInitialValues((prev) => {
       return {
@@ -47,7 +55,7 @@ const Timer = ({
   useEffect(() => {
     let interval;
 
-    if (isActive) {
+    if (timerStats.isTimerActive) {
       document.title = `Timer - ${work.hours > 0 ? work.hours + ":" : ""}${
         work.minutes < 10 ? "0" + work.minutes : work.minutes
       }:${work.seconds < 10 ? "0" + work.seconds : work.seconds}`;
@@ -57,7 +65,10 @@ const Timer = ({
       document.title = "Productivity Manager";
     }
 
-    if (isActive && rounds <= userRounds) {
+    if (
+      timerStats.isTimerActive &&
+      timerStats.rounds <= timerStats.userRounds
+    ) {
       interval = setInterval(() => {
         setWork((prevValue) => {
           const newSeconds =
@@ -74,18 +85,22 @@ const Timer = ({
               : prevValue.hours;
 
           if (newSeconds < 1 && newMinutes < 1 && newHours < 1) {
-            if (rounds === userRounds) {
+            if (timerStats.rounds === timerStats.userRounds) {
               setWork(initialValues.timer);
             }
             toggleActive();
             handleTimerReset(setWork);
             clearInterval(interval); // Clear the interval immediately
-            setIsBreakActive(true);
+            setTimerStats((prev) => {
+              return {
+                ...prev,
+                isBreakActive: true,
+              }
+            })
             if (audio) {
               audio.play();
             }
           }
-
           return {
             seconds: newSeconds,
             minutes: newMinutes,
@@ -96,7 +111,7 @@ const Timer = ({
     }
 
     return () => clearInterval(interval);
-  }, [isActive, work, rounds, userRounds]);
+  }, [timerStats, work]);
 
   return (
     <div className={styles.timer_container}>
@@ -127,22 +142,22 @@ const Timer = ({
         </p>
       )}
       <div>
-        <Button onClick={toggleEditing} disabled={isActive} color="blue">
+        <Button onClick={toggleEditing} disabled={timerStats.isTimerActive || timerStats.isBreakActive} color="blue">
           {isEditing ? "Save" : "Edit"}
         </Button>
         <Button
-          disabled={isEditing || isBreakActive}
+          disabled={isEditing || timerStats.isBreakActive}
           onClick={() => handleTimerReset(setWork)}
           color={"yellow"}
         >
           Reset
         </Button>
         <Button
-          disabled={isEditing || isBreakActive}
+          disabled={isEditing || timerStats.isBreakActive}
           onClick={toggleActive}
           color={"green"}
         >
-          {isActive ? "Pause" : "Start"}
+          {timerStats.isTimerActive ? "Pause" : "Start"}
         </Button>
       </div>
     </div>

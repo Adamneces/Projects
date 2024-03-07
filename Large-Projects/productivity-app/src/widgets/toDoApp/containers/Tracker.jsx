@@ -1,16 +1,13 @@
-import React from "react";
 import styles from "../ToDoApp.module.css";
-import TrackingBar from "../UI/TrackingBar";
+
 import { isWithinWeek, isSameDay, parseDate } from "../utilities/utilities";
+import useWeekDays from "../../../hooks/useWeekDays";
+import TrackingBar from "../UI/TrackingBar";
+import ProgressBar from "../UI/ProgressBar";
 
 const Tracker = ({ toDos }) => {
-  const today = new Date();
   const completedTasks = toDos.filter((task) => task.taskIsDone);
-
-  const lastDay = new Date(today);
-  lastDay.setDate(today.getDate() + (7 - today.getDay()));
-  const firstDay = new Date(today);
-  firstDay.setDate(today.getDate() - today.getDay());
+  const [today, firstDay, lastDay] = useWeekDays();
 
   const todaysTasks = toDos.filter((task) => {
     const taskDate = new Date(task.date);
@@ -56,24 +53,8 @@ const Tracker = ({ toDos }) => {
       <TrackingBar className={styles.tracker_trackerLineContainer} label="Progress">
         {progressPercentage > 0 ? progressPercentage + "%" : "0"}
       </TrackingBar>
-      <div className={styles.tracker_progressBarContainer}>
-        <div
-          className={`${styles.tracker_progressBar} ${
-            progressPercentage > 99.9 ? styles.tracker_animateComplete : ""
-          }`}
-          style={{
-            width: `${progressPercentage > 0 ? progressPercentage : "0"}%`,
-            background:
-              progressPercentage < 25
-                ? "red"
-                : progressPercentage < 50
-                ? "orange"
-                : progressPercentage < 75
-                ? "yellow"
-                : "green",
-          }}
-        ></div>
-      </div>
+
+      <ProgressBar height='35px' progress={progressPercentage}/>
     </div>
   );
 };

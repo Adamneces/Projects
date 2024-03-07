@@ -4,6 +4,22 @@
   box-sizing: border-box;
 }
 
+.error{
+  font-size: 26px;
+  background-color: rgb(240, 169, 157);
+  color: rgb(98, 16, 15);
+  text-shadow: 0.5px 0.5px rgb(54, 9, 9);
+  width: 80%;
+  max-width: 800px;
+  border-radius: 14px;
+  padding: 8px 18px;
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  transform: translate(-50%, 100%);
+  text-align: center;
+}
+
 body {
   margin: 0;
   font-family: 'Raleway', sans-serif;

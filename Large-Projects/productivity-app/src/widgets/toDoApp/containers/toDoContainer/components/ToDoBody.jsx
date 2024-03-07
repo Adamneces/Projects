@@ -1,15 +1,19 @@
-import ToDoTask from './ToDoBodyComponents/ToDoTask';
-import styles from '../ToDo.module.css';
+import ToDoTasks from "./ToDoTask/ToDoTasks";
+import styles from "../ToDo.module.css";
 
-const ToDoBody = ({ toDos, setToDos, displayTasks, filterTasks }) => {
+import { useContext } from "react";
+import ToDoContext from "../store/ToDoContext";
+
+const ToDoBody = ({ toDos, setToDos }) => {
+  const { displayTasks, filterTasks } = useContext(ToDoContext);
 
   return (
     <div className={styles.toDoBody_tasksContainer}>
-      <ToDoTask 
-      filterTasks={filterTasks}
-      toDos={toDos} 
-      setToDos={setToDos} 
-      displayTasks={displayTasks}
+      <ToDoTasks
+        filterTasks={filterTasks}
+        toDos={toDos}
+        setToDos={setToDos}
+        displayTasks={displayTasks}
       />
     </div>
   );
