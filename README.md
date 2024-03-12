@@ -30,7 +30,12 @@ This directory houses substantial projects I've developed from scratch, showcasi
 
 The 'Small Projects' directory contains a variety of projects developed during courses. These projects range from simple demonstrations of learned techniques to more complex implementations. Some examples include:
 
-- Many different projects which were created during the learning journey, some of these projects are fairly complex and some very straightforward or simple - focusing on some different technology/part of the learning process
+- Quiz App
+- To-Do List
+- Movie App
+- Redux Application
+- React Router Application
+- many more...
 
 ## Technologies Used
 
