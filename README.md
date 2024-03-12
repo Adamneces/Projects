@@ -13,17 +13,17 @@ I am a developer based in Reichenberg - Czechia, right now I work as a bartender
 This directory houses substantial projects I've developed from scratch, showcasing my ability to tackle complex challenges. Here are a few noteworthy projects:
 
 - **Productivity App**
-  - [Application that includes To-Do List, Habit Tracker and various smaller features to make your life a little more productive]
-  - [Habit Tracker, To-Do List, Various Trackers, Weather widget and Pomodoro Timer]
-  - [Waiting for deployment]
+  - Application that includes To-Do List, Habit Tracker and various smaller features to make your life a little more productive
+  - Habit Tracker, To-Do List, Various Trackers, Weather widget and Pomodoro Timer
+  - Waiting for deployment
 
 - **Quiz App**
-  - [Application featuring various quizes, highly customizeable]
-  - [Different categories, various quizes, dashboard, users can create quizes, authentication]
-  - [Project still under development!!]
+  - Application featuring various quizes, highly customizeable
+  - Different categories, various quizes, dashboard, users can create quizes, authentication
+  - Project still under development!!
 
 - **Game App**
-  - [Still in the planning faze...]
+  - Still in the planning faze...
 
 
 ### 2. Small Projects
@@ -35,9 +35,10 @@ The 'Small Projects' directory contains a variety of projects developed during c
 ## Technologies Used
 
 - HTML/CSS
-- Different React/Javascript libraries
+- Different React/Javascript libraries/features
 - React
 - React Router
+- Redux
 
 
 ## Seeking Opportunities
@@ -52,7 +53,11 @@ This portfolio is a living document and will continue to grow with more exciting
 
 I am open to new opportunities and collaborations. Feel free to reach out:
 
-- Email: [Zelvanevico@gmail.com]
+- Email: Zelvanevico@gmail.com
 
 Thank you for exploring my portfolio! I'm excited about the possibility of working together and contributing to innovative projects in the tech industry.
+
+## Links to the websites
+
+- Websites currently waiting to be deployed..
 
