@@ -1,15 +1,17 @@
 .container {
-    width: 610px;
     height: 200px;
     background-color: rgb(37,37,37);
     border-radius: 14px;
-    margin-top: 15px; 
-    margin-left: 40px;  
     padding: 20px 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
+  @media only screen and (max-width: 1550px) {
+  .container{
+    padding: 20px 40px ;
+  }
+}
   .containerError{
     width: 610px;
     height: 200px;

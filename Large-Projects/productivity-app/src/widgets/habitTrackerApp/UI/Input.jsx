@@ -16,7 +16,7 @@ const Input = ({ TextArea, onChange, value, ...props }) => {
         <input
           onChange={onChange}
           required
-          maxLength={30}
+          maxLength={26}
           className={styles.habit_form_inputs}
           value={value}
           {...props}

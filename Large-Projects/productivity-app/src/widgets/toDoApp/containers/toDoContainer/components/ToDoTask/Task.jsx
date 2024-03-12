@@ -9,19 +9,21 @@ import {
   faDownload,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatDate } from "../../../../utilities/utilities";
+import { useContext } from "react";
+import TaskContext from "../../store/TaskContext";
 
-const Task = ({
-  task,
-  index,
-  handleFinishTask,
-  editedTaskIndex,
-  setEditedTaskIndex,
-  editedTasks,
-  setEditedTasks,
-  handleDeleteTask,
-  handleEditTask,
-  handleIsEditing,
-}) => {
+const Task = ({ task, index }) => {
+  const {
+    editedTasks,
+    setEditedTasks,
+    editedTaskIndex,
+    setEditedTaskIndex,
+    handleDeleteTask,
+    handleIsEditing,
+    handleEditTask,
+    handleFinishTask,
+  } = useContext(TaskContext);
+  
   const today = new Date();
   let tomorrow = new Date(today);
   tomorrow.setDate(today.getDate() + 1);

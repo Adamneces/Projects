@@ -25,7 +25,7 @@ const HabitTrackerApp = () => {
   });
 
   return (
-    <div className={styles.container}>
+    <div id="habitTracker" className={styles.container}>
       <HabitTrackerContainer
         handleNewHabit={handleNewHabit}
         habits={habitsWithDisabledDays}

@@ -2,11 +2,20 @@
     display: grid;
     grid-template-columns: repeat(20, 1fr);
     grid-template-rows: repeat(28, 1fr);
-    width: 47%;
+    width: 50%;
+    min-width: 750px;
     height: 720px;
     position: relative;
     gap: 12px;
 } 
+@media only screen and (max-width: 1550px) {
+    .appContainer{
+        width: 90%;
+        max-width: 1100px;
+        grid-template-columns: repeat(19, 1fr);
+        margin-bottom: 15px;
+    }   
+}
 
 /*DailyTracker -------------------------------------------------------------------------------------*/
 .daily_tracker_container{

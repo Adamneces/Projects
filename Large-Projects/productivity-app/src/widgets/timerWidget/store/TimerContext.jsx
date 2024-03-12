@@ -9,7 +9,7 @@ const initialStatsValues = {
   pickedSound: null,
   initialValues: {
     timer: { hours: 0, minutes: 20, seconds: 0 },
-    break: { hours: 0, minutes: 5, seconds: 0 },
+    break: { minutes: 5, seconds: 0 },
   },
 };
 
@@ -19,7 +19,7 @@ export const TimerProvider = ({ children }) => {
   const [timerStats, setTimerStats] = useState(initialStatsValues);
   const [initialValues, setInitialValues] = useState({
     timer: { hours: 0, minutes: 20, seconds: 0 },
-    break: { hours: 0, minutes: 5, seconds: 0 },
+    break: { minutes: 5, seconds: 0 },
   });
 
   useEffect(() => {
@@ -45,7 +45,6 @@ export const TimerProvider = ({ children }) => {
     setState({
       seconds: initialValues.break.seconds,
       minutes: initialValues.break.minutes,
-      hours: initialValues.break.hours,
     });
   };
 

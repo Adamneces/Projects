@@ -10,7 +10,7 @@ const ToDoApp = () => {
   const [toDos, setToDos] = useState([]);
 
   return (
-    <div className={styles.appContainer}>
+    <div id="todoApp" className={styles.appContainer}>
       <ToDo toDos={toDos} setToDos={setToDos} />
       <Tracker toDos={toDos} />
       <InfoWidget />

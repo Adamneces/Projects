@@ -22,7 +22,6 @@ const BreakTimer = () => {
         break: {
           seconds: breakTime.seconds,
           minutes: breakTime.minutes,
-          hours: breakTime.hours,
         },
       };
     });
@@ -42,8 +41,6 @@ const BreakTimer = () => {
 
     if (timerStats.isBreakActive) {
       document.title = `Break - ${
-        breakTime.hours > 0 ? breakTime.hours + ":" : ""
-      }${
         breakTime.minutes < 10 ? "0" + breakTime.minutes : breakTime.minutes
       }:${
         breakTime.seconds < 10 ? "0" + breakTime.seconds : breakTime.seconds
@@ -63,14 +60,8 @@ const BreakTimer = () => {
             prevValue.seconds === 0 && prevValue.minutes > 0
               ? prevValue.minutes - 1
               : prevValue.minutes;
-          const newHours =
-            prevValue.seconds === 0 &&
-            prevValue.minutes === 0 &&
-            prevValue.hours > 0
-              ? prevValue.hours - 1
-              : prevValue.hours;
 
-          if (newSeconds < 1 && newMinutes < 1 && newHours < 1) {
+          if (newSeconds < 1 && newMinutes < 1) {
             if (timerStats.rounds === timerStats.userRounds) {
               setBreakTime(initialValues.break);
             }
@@ -93,7 +84,6 @@ const BreakTimer = () => {
           return {
             seconds: newSeconds,
             minutes: newMinutes,
-            hours: newHours,
           };
         });
       }, 1000);
@@ -113,13 +103,12 @@ const BreakTimer = () => {
               label={key}
               value={breakTime[key]}
               onChange={setBreakTime}
-              options={key === "hours" ? hoursArray : sixtyArray}
+              options={sixtyArray}
             />
           ))}
         </div>
       ) : (
         <p className={styles.break_timer_time}>
-          <span>{breakTime.hours > 0 ? `${breakTime.hours}:` : null}</span>
           <span>
             {breakTime.minutes < 10
               ? `0${breakTime.minutes}`

@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import styles from "./ToDo.module.css";
 
 import ToDoHeader from "./components/ToDoHeader";

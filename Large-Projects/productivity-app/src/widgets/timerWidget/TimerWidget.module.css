@@ -1,14 +1,17 @@
 /*TimerWidget  --------------*/
 .container {
-  width: 810px;
   height: 200px;
   background-color: rgb(35, 35, 35);
   border-radius: 14px;
-  margin-top: 15px;
   padding: 20px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+@media only screen and (max-width: 1550px) {
+  .container{
+    justify-content: space-evenly;
+  }
 }
 
 .animation {
@@ -268,5 +271,20 @@
   }
   100% {
     background-position: 0% 50%;
+  }
+}
+
+@media only screen and (max-width: 1750px){
+  .timer_time{
+    font-size: 47px;
+  }
+  .break_timer_time{
+    font-size: 47px;
+  }
+  .rounds_roundsDisplay{
+    font-size: 32px;
+  }
+  .sounds_sound{
+    font-size: 17px;
   }
 }
