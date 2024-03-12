@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<style>
+    body{
+        background: linear-gradient(90deg, rgb(187, 168, 168), rgb(226, 185, 185));
+    }
+    .container{
+        width: 40%;
+        height: 50vh;
+        margin: 100px auto;
+        text-align: center;
+        padding-top: 50px;
+        background: rgb(154, 121, 81);
+        border: 10px solid rgb(188, 150, 104);
+    }
+    button{
+        width: 150px;
+        height: 50px;
+        font-size: 20px;
+        margin: 0 10px;
+        background: rgb(184, 235, 231);
+        border: 2px solid rgb(139, 176, 171);
+        border-radius: 10px;
+        font-weight: 500;
+    }
+    h1{
+        font-size: 70px;
+        margin: 30px auto;
+        color: white;
+    }
+</style>
+<div class="container" id="container">
+<h1 id="count">0</h1>
+    <button onclick="changeCount(-1)" type="submit" id="decreaseB">DECREASE</button>
+    <button onclick="reset()" type="submit" id="resetB">RESET</button>
+    <button onclick="changeCount(1)" type="submit" id="increaseB">INCREASE</button><br><br>
+    <button onclick="random()" type="submit" id="increaseB">RANDOM</button>
+</div>
+
+
+<script>
+let count = 0;
+
+const changeCount = (num) => {
+    count += num;
+    document.getElementById('count').innerHTML = count;
+};
+
+const reset = () => {
+    count = 0;
+    document.getElementById('count').innerHTML = count;
+}
+const random = (num) => {
+    num = Math.round(Math.random() * 100);
+    count = num;
+    document.getElementById('count').innerHTML = count;
+}
+
+
+</script>
+</body>
+</html>

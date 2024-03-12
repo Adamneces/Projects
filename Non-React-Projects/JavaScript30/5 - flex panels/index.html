@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="panels">
+        <div class="panel panel1">
+          <p>Hey</p>
+          <p>It's</p>
+          <p>Me</p>
+        </div>
+        <div class="panel panel2">
+          <p>Take</p>
+          <p>A</p>
+          <p>Receipt</p>
+        </div>
+        <div class="panel panel3">
+          <p>Have</p>
+          <p>Breakfest</p>
+          <p>Today</p>
+        </div>
+        <div class="panel panel4">
+          <p>The</p>
+          <p>Time</p>
+          <p>Is fast</p>
+        </div>
+        <div class="panel panel5">
+          <p>You</p>
+          <p>Losers</p>
+          <p>Stinks</p>
+        </div>
+      </div>  
+
+
+<script>
+    const panels = document.querySelectorAll('.panel');
+
+    function toggleOpen(){
+        this.classList.toggle('open');
+    }
+    function toggleActive(e){
+        if(e.propertyName.includes('flex')){
+             this.classList.toggle('open-active');
+        }
+    }
+
+    panels.forEach(panel => panel.addEventListener('click', toggleOpen));
+    panels.forEach(panel => panel.addEventListener('transitionend', toggleActive));
+</script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<style>
+    *{
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    body{
+        background-color: #8ae58f;
+    }
+    .wrapper{
+        width: 400px;
+        border: 1px solid white;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+    }
+    .container{
+        width: 100%;
+        background-color: #6db770;
+        padding: 50px 40px;
+        box-shadow: 0 20px 65px rgba(87, 11, 16, 0.5);
+        position: relative;
+        border-radius: 9px;
+        text-align: center;
+    }
+    .container:after{
+        content: "";
+        position: absolute;
+        width: 80%;
+        height: 130%;
+        background-color: #fff;
+        z-index: -1;
+        top: -15%;
+        left: 10%;
+    }
+    .container p{
+        color: #ffffff;
+        line-height: 2;
+        font-size: 19px;
+    }
+    .container h3{
+        color: #ffffff;
+        margin: 20px 0 60px 0;
+        font-weight: 600;
+        font-size: 23px;
+        text-transform: capitalize;
+    }
+    .container button{
+        background-color: #ffffff;
+        border: none;
+        padding: 15px 45px;
+        border-radius: 7px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #6db770;
+        cursor: pointer;
+    }
+</style>    
+<div class="wrapper">
+    <div class="container">
+        <p id="quote">Random Quote generator - click button below</p>
+        <h3 id="author">Adam Comb</h3>
+        <button id="btn">Get Quote</button>
+    </div>
+</div>
+
+
+<script>
+let quote = document.getElementById('quote');
+let author = document.getElementById('author');
+let btn = document.getElementById('btn');
+
+const url = "https://api.quotable.io/random";
+
+async function randomQuote() {
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data);
+
+    quote.innerHTML = data.content;
+    author.innerHTML = data.author;
+}
+btn.addEventListener('click', randomQuote);
+
+
+
+</script>
+</body>
+</html>

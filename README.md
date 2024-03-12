@@ -37,6 +37,10 @@ The 'Small Projects' directory contains a variety of projects developed during c
 - React Router Application
 - many more...
 
+### 3. Non React Projects
+Any Projects made during the learning phase - mostly made in HTML - CSS - JAVASCRIPT, these projects are not made in React.
+
+
 ## Technologies Used
 
 - HTML/CSS
