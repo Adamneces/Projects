@@ -1,0 +1,9 @@
+THREE.js
+
+pro vytvoření scény potřebujeme 4 elementy:
+- Scene
+- Objects  // prostě něco co tam bude
+- Camera
+- Renderer
+
+Mesh - kombinace geometrie a materiálu (tvar - jak to vypadá);

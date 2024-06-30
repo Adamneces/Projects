@@ -1,0 +1,97 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  background-color: rgb(57, 52, 52);
+  height: 100vh;
+  overflow-x: hidden;
+}
+li{
+  list-style: none;
+}
+.bodyContainer{
+  width: 100%;
+  background: white;
+  margin-top: -20px;
+  transform-origin: top left;
+  transition: 0.75s ease;
+}
+.menuIcon{
+  color: black;
+  position: fixed;
+  left: 20px;
+  bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  font-size: 25px;
+  border-radius: 50%;
+  border: none;
+  background-color: bisque;
+  transform: rotate(90deg);
+  letter-spacing: 1.5px;
+  font-weight: bold;
+}
+.side-nav{
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  color: white;
+  font-size: 22px;
+  letter-spacing: 1px;
+}
+.side-nav ul{
+  height: 140px;
+  display: flex;
+  align-items: ;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+#c-header {
+  background-color: #502a2a;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+#c-section {
+  padding: 20px;
+  background-color: #fff;
+  margin-bottom: 40px;
+}
+
+#c-aside {
+  padding: 20px;
+  background-color: #f9f9f9;
+  margin-bottom: 220px;
+}
+
+#c-footer {
+  background-color: #502a2a;;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+#c-h2 {
+  color: #333;
+}
+
+#c-ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#c-li {
+  margin-bottom: 10px;
+}
+
+#c-li strong {
+  color: #333;
+}
+
+

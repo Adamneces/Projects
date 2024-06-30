@@ -1,0 +1,30 @@
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+}
+.input{
+    width: 256px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: none;
+    border-bottom: 1px solid grey;
+    background-color: rgb(219, 219, 219);
+}
+.input:focus{
+    outline: none;
+    border-bottom: 2px solid rgb(67, 67, 67);
+}
+.button{
+    background-color: #325A5D;
+    color: white;
+    border: none;
+    padding: 6px 9px;
+    border-radius: 6px;
+}
+.button:hover{
+    background-color: #244042;
+    cursor: pointer;
+    color: white;
+}

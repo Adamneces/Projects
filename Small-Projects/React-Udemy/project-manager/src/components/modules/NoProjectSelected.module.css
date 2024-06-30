@@ -1,0 +1,40 @@
+.container{
+    margin-top: 96px;
+    text-align: center;
+    width: 66%;    
+}
+.heading{
+    font-size: 26px;
+    font-weight: 600;
+    color: #261d1d;
+    margin: 16px auto;
+}
+.image{
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+}
+.paragraph{
+    color: #2f2626;
+    margin-bottom: 16px;
+    font-size: 18px;
+}
+.buttonWrapper{
+    margin-top: 32px;
+}
+.button{
+    padding: 8px 14px;
+    text-align: center;
+    background-color: #386163;
+    color: rgb(234, 234, 234);
+    border: none;
+    border-radius: 6px;
+    margin: 8px 24px; 
+    font-size: 18px;
+    transition: background-color 0.2s ease;
+}
+.button:hover{
+    background-color: #2B4D4F;
+    cursor: pointer;
+    color: white;
+}
