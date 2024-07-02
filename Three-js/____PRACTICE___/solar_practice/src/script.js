@@ -23,7 +23,6 @@ const sizes = {
     height: window.innerHeight
 };
 // loader
-const rgbeLoader = new RGBELoader();
 const textureLoader = new THREE.TextureLoader();
 const gltfLoader = new GLTFLoader()
 
@@ -42,31 +41,6 @@ textureLoader.load('/textures/solar/milky-way.jpg', (envMap) => {
     scene.background = envMap
 })
 scene.backgroundIntensity = 0.04
-/**
- * MODELS
- */
-
-let phobos = null
-let deimos = null
-
-gltfLoader.load(
-    '/models/Phobos_1_1000.glb',
-    (gltf) => {     // Success
-
-           phobos = gltf.scene
-           phobos.scale.set(0.009, 0.009, 0.009)
-           phobos.position.z = -3
-    },            
-);
-gltfLoader.load(
-    '/models/Deimos_1_1000.glb',
-    (gltf) => {     // Success
-
-           deimos = gltf.scene
-           deimos.scale.set(0.009, 0.009, 0.009)
-           deimos.position.z = -3
-    },
-)
 
 // Earth - texture
 const earthTexture = textureLoader.load('textures/solar/earth/earth.jpg');
@@ -203,7 +177,6 @@ const moon = new THREE.Mesh(
         map: textureLoader.load('textures/solar/earth/moon.jpg')
     })
 )
-moon.position.x = 4
 earthGroup.add(moon);
 
 camera.lookAt(earthGroup.position)  
@@ -242,8 +215,7 @@ const mercury = new THREE.Mesh(
         map: textureLoader.load('textures/solar/mercury/mercury.jpg')
     })
 )
-mercury.position.z = -92
-mercury.position.y = 0.62
+mercury.position.y = 0.5
 scene.add(mercury) 
 
 /**
@@ -260,10 +232,30 @@ const mars = new THREE.Mesh(
 )
 mars.rotation.x = -25 * Math.PI / 180
 marsGroup.add(mars)
-if (phobos && deimos){
-    marsGroup.add(phobos, deimos)
-}
-scene.add(marsGroup)
+
+let phobos = null
+let deimos = null
+
+gltfLoader.load(
+    '/models/Phobos_1_1000.glb',
+    (gltf) => {     // Success
+
+           phobos = gltf.scene
+           phobos.scale.set(0.004, 0.004, 0.004)
+           phobos.position.set(0,40,0)
+    },            
+);
+gltfLoader.load(
+    '/models/Deimos_1_1000.glb',
+    (gltf) => {     // Success
+
+           deimos = gltf.scene
+           deimos.scale.set(0.009, 0.009, 0.009)
+           deimos.position.z = -3
+    },
+)
+
+scene.add(marsGroup);
 
 /**
  * Jupiter
@@ -275,7 +267,6 @@ const jupiter = new THREE.Mesh(
         map: jupiterTexture
     })
 )
-jupiterGroup.position.z = 334
 jupiter.rotation.x = -3.13 * Math.PI / 180
     jupiterGroup.add(jupiter)
 
@@ -285,7 +276,6 @@ const europa = new THREE.Mesh(
         map: europaTexture
     })
 )
-europa.position.z = -20
 
 const callisto = new THREE.Mesh(
     new THREE.SphereGeometry(0.378, 32,32),
@@ -293,7 +283,6 @@ const callisto = new THREE.Mesh(
         map: callistoTexture
     })
 )
-callisto.position.z = 20
 
 const ganymede = new THREE.Mesh(
     new THREE.SphereGeometry(0.413, 32,32),
@@ -301,7 +290,6 @@ const ganymede = new THREE.Mesh(
         map: ganymedeTexture
     })
 )
-ganymede.position.z = 20
 
 const io = new THREE.Mesh(
     new THREE.SphereGeometry(0.286, 32,32),
@@ -309,7 +297,6 @@ const io = new THREE.Mesh(
         map: ioTexture
     })
 )
-io.position.z = 20
 
 jupiterGroup.add(europa, callisto, io, ganymede)
 scene.add(jupiterGroup)
@@ -349,9 +336,6 @@ const saturnRing = new THREE.Mesh(saturnRingGeometry,
 );
 saturn.rotation.x = 26.73 * Math.PI / 180; 
 saturnRing.rotation.x = -63.27 * Math.PI / 180; 
-
-
-saturnGroup.position.z = 736;
 
 //moons
 const titan = new THREE.Mesh(
@@ -402,8 +386,6 @@ const uranus = new THREE.Mesh(
     })
 )
 uranus.rotation.x = 98 * Math.PI / 180
-
-uranusGroup.position.z = 1325
 
 const titania = new THREE.Mesh(
     new THREE.SphereGeometry(0.124, 32, 32),
@@ -557,13 +539,31 @@ const planets = {
     neptune: neptuneGroup,
 }
 const moons = {
-    moon: moon,
+    moon,
+    phobos: null,
+    deimos: null,
+    europa,
+    callisto,
+    io,
+    ganymede,
+    titan,
+    rhea,
+    lapetus,
+    dione,
+    tethys,
+    titania,
+    oberon,
+    umbriel,
+    ariel,
+    triton
+    
 }
 
 let selectedMoon = null;
 let selectedPlanet = null;
 
 saturnBtn.addEventListener('click', (event) => {
+    selectedMoon = null;
     selectedPlanet = event.target.textContent
     controls.target.copy(planets[selectedPlanet].position);
     controls.update();
@@ -601,6 +601,11 @@ function tick() {
     if (selectedPlanet) {
         camera.position.x = Math.cos(data.orbitSpeed[selectedPlanet] * elapsedTime) * data.distance[selectedPlanet]
         camera.position.z = Math.sin(data.orbitSpeed[selectedPlanet] * elapsedTime) * data.distance[selectedPlanet]
+        if (selectedPlanet === 'saturn'){
+            camera.position.y = 7
+        }else{
+            camera.position.y = 2
+        }
         camera.lookAt(planets[selectedPlanet].position);
 
     }
@@ -608,10 +613,10 @@ function tick() {
         const worldPosition = new THREE.Vector3();
         const pos = moons[selectedMoon].getWorldPosition(worldPosition);
     
-    camera.position.copy(pos);
-    camera.position.z += 1
-    camera.position.x -= 1
-    camera.lookAt(pos);
+        camera.position.copy(pos);
+        camera.position.z += 1
+        camera.position.x -= 1
+        camera.lookAt(pos);
     }
     /**
     }
@@ -677,6 +682,9 @@ function tick() {
     mars.rotation.y += data.angularSpeed.mars * (1 / 60)
     // Phobos orbit axis
     if (phobos){
+        moons.phobos = phobos
+        marsGroup.add(phobos)
+        phobos.position
         phobos.position.x = Math.cos(data.orbitSpeed.phobos * elapsedTime) * 2;
         phobos.position.z = Math.sin(data.orbitSpeed.phobos * elapsedTime) * 2;
         phobos.position.y = Math.sin(data.orbitSpeed.phobos * elapsedTime) * -1
@@ -685,8 +693,10 @@ function tick() {
     }
     // Deimos orbit axis
     if (deimos){
-        deimos.position.x = Math.cos(data.orbitSpeed.deimos * elapsedTime) * orbitRadius;
-        deimos.position.z = Math.sin(data.orbitSpeed.deimos * elapsedTime) * orbitRadius;
+        moons.deimos = deimos
+        marsGroup.add(deimos)
+        deimos.position.x = Math.cos(data.orbitSpeed.deimos * elapsedTime) * 3;
+        deimos.position.z = Math.sin(data.orbitSpeed.deimos * elapsedTime) * 3;
         deimos.position.y = Math.sin(data.orbitSpeed.deimos * elapsedTime) * 0.5
 
         deimos.rotation.y += data.orbitSpeed.deimos * (1 / 60)
@@ -758,6 +768,22 @@ function tick() {
     triton.position.x = Math.sin(data.orbitSpeed.triton * elapsedTime) * 13
     triton.position.z = Math.cos(data.orbitSpeed.triton * elapsedTime) * 13
     triton.position.y = Math.sin(data.orbitSpeed.triton * elapsedTime) * -5
+
+    // Rest of the moons axis
+    europa.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
+    callisto.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
+    io.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
+    ganymede.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
+    titan.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
+    rhea.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
+    lapetus.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
+    dione.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
+    tethys.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
+    titania.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
+    oberon.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
+    umbriel.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
+    ariel.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
+    triton.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
 
     // Render
     renderer.render(scene, camera);
