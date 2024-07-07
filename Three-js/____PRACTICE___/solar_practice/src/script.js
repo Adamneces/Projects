@@ -1,15 +1,12 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "lil-gui";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 
 import { data } from "./data/data"; 
-import { textures } from "./data/textures";
 import { orbit, rotate, updateMoonRotations } from "./data/utilities";
 import {info} from "./data/planetInfo.js"
 
-import sunVertexShader from "./shaders/sunGlow/vertex.glsl"
-import sunFragmentShader from "./shaders/sunGlow/fragment.glsl"
+import { createAllPlanets } from "./createPlanets.js";
 
 // GUI
 const gui = new GUI();
@@ -21,6 +18,9 @@ const moonBtn = document.querySelectorAll(".moonGroup button");
 const infoPanel = document.querySelector(".info-text")
 const infoHeading = document.querySelector(".info-heading");
 
+const loadingContainer = document.getElementById('loading-container');
+const loadingBar = document.getElementById('loading-bar');
+
 // Scene
 const scene = new THREE.Scene();
 
@@ -31,7 +31,6 @@ const sizes = {
 };
 // loader
 const textureLoader = new THREE.TextureLoader();
-const gltfLoader = new GLTFLoader()
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
@@ -59,324 +58,11 @@ camera.position.set(160,2,2)
  * OBJECTS
  */
 
-// Earth Group
-const earthGroup = new THREE.Group();
-earthGroup.rotation.x = -23.4 * Math.PI / 180
+const [earthGroup, earth, clouds, lightMesh, moon, mercury, venusGroup, venus, venusAtmosphere,
+    marsGroup, mars, phobos, deimos, jupiterGroup, jupiter, io, callisto, ganymede, europa,
+    saturnGroup, saturn, titan, rhea, lapetus, dione, tethys, uranusGroup, uranus, titania, oberon, umbriel, ariel,
+    neptuneGroup, neptune, triton, sun, sunGlow] = await createAllPlanets(camera);
 
-// Earth    
-const earthGeometry = new THREE.SphereGeometry(1, 64, 64);
-const earth = new THREE.Mesh(
-    earthGeometry,
-    new THREE.MeshStandardMaterial({
-        map: textures.earth.earthTexture,
-        normalMap: textures.earth.earthNormalTexture,
-        bumpMap: textures.earth.earthBumpMap,
-        metalnessMap: textures.earth.oceanTexture,
-    })
-);
-
-// Light Mesh
-const lightMesh = new THREE.Mesh(
-    earthGeometry,
-    new THREE.MeshBasicMaterial({
-        map: textures.earth.earthNightLights,
-        blending: THREE.AdditiveBlending,
-        color: new THREE.Color(0x606060)
-    })
-);
-
-// Clouds
-const clouds = new THREE.Mesh(
-    new THREE.SphereGeometry(1.01, 64, 64),
-    new THREE.MeshStandardMaterial({
-        map: textures.earth.cloudsMap,
-        transparent: true,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-        depthTest: false,
-        opacity: 0.9,
-    })
-);
-
-// Moon
-const moon = new THREE.Mesh(
-    new THREE.SphereGeometry(0.267, 32, 32),
-    new THREE.MeshStandardMaterial({
-        map: textures.earth.moonTexture
-    })
-)
-earthGroup.add(earth, moon, clouds, lightMesh);
-
-/**
- * VENUS
- *  */ 
-const venusGroup = new THREE.Group()
-venusGroup.rotation.x =  -177 * Math.PI / 180
-
-const venus = new THREE.Mesh(
-    new THREE.SphereGeometry(0.95, 32,32),
-    new THREE.MeshStandardMaterial({
-        map: textures.venus.venusTexture,
-    })
-)
-
-const venusAtmosphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.95, 32,32), 
-    new THREE.MeshStandardMaterial({
-        map: textures.venus.venusAtmosphereTexture,
-        blending: THREE.AdditiveBlending,
-        transparent: true,
-        opacity: 0.45
-    })
-)
-venusGroup.add(venus,venusAtmosphere);
-
-/**
- * MERCURY
- */
-const mercury = new THREE.Mesh(
-    new THREE.SphereGeometry(0.38, 32, 32),
-    new THREE.MeshStandardMaterial({
-        map: textures.mercury.mercuryTexture
-    })
-)
-
-/**
- * MARS
- */
-const marsGroup = new THREE.Group()
-
-// Mars
-const mars = new THREE.Mesh(
-    new THREE.SphereGeometry(0.532, 32, 32),
-    new THREE.MeshStandardMaterial({
-        map: textures.mars.marsTexture
-    })
-)
-mars.rotation.x = -25 * Math.PI / 180
-marsGroup.add(mars)
-
-let phobos = null
-let deimos = null
-
-gltfLoader.load(
-    '/models/Phobos_1_1000.glb',
-    (gltf) => {     // Success
-
-           phobos = gltf.scene
-           phobos.scale.set(0.004, 0.004, 0.004)
-           phobos.position.set(0,40,0)
-    },            
-);
-gltfLoader.load(
-    '/models/Deimos_1_1000.glb',
-    (gltf) => {     // Success
-
-           deimos = gltf.scene
-           deimos.scale.set(0.009, 0.009, 0.009)
-           deimos.position.z = -3
-    },
-)
-
-/**
- * Jupiter
- */
-const jupiterGroup = new THREE.Group()
-const jupiter = new THREE.Mesh(
-    new THREE.SphereGeometry(11.2, 128, 128),
-    new THREE.MeshStandardMaterial({
-        map: textures.jupiter.jupiterTexture
-    })
-)
-jupiter.rotation.x = -3.13 * Math.PI / 180
-    jupiterGroup.add(jupiter)
-
-const europa = new THREE.Mesh(
-    new THREE.SphereGeometry(0.245, 32, 32),
-    new THREE.MeshStandardMaterial({
-        map: textures.jupiter.europaTexture
-    })
-)
-
-const callisto = new THREE.Mesh(
-    new THREE.SphereGeometry(0.378, 32,32),
-    new THREE.MeshStandardMaterial({
-        map: textures.jupiter.callistoTexture
-    })
-)
-
-const ganymede = new THREE.Mesh(
-    new THREE.SphereGeometry(0.413, 32,32),
-    new THREE.MeshStandardMaterial({
-        map: textures.jupiter.ganymedeTexture
-    })
-)
-
-const io = new THREE.Mesh(
-    new THREE.SphereGeometry(0.286, 32,32),
-    new THREE.MeshStandardMaterial({
-        map: textures.jupiter.ioTexture
-    })
-)
-jupiterGroup.add(europa, callisto, io, ganymede)
-
-/**
- * Saturn
- */
-const saturnGroup = new THREE.Group();
-const saturn = new THREE.Mesh(
-    new THREE.SphereGeometry(9, 64, 64),
-    new THREE.MeshStandardMaterial({
-        map: textures.saturn.saturnTexture
-    })
-)
-saturn.rotation.x = 26.73 * Math.PI / 180
-
-// Function to adjust ring geometry UV mapping
-function adjustRingGeometry(geometry) {
-    const pos = geometry.attributes.position;
-    const v3 = new THREE.Vector3();
-    for (let i = 0; i < pos.count; i++) {
-        v3.fromBufferAttribute(pos, i);
-        geometry.attributes.uv.setXY(i, v3.length() < 14 ? 0 : 1, 1);
-    }
-}
-
-const saturnRingGeometry = new THREE.RingGeometry(12, 18.5, 64);
-adjustRingGeometry(saturnRingGeometry);
-
-const saturnRing = new THREE.Mesh(saturnRingGeometry, 
-    new THREE.MeshBasicMaterial({
-        map: textures.saturn.saturnRingTexture,
-        side: THREE.DoubleSide,
-        transparent: true
-    })
-);
-saturn.rotation.x = 26.73 * Math.PI / 180; 
-saturnRing.rotation.x = -63.27 * Math.PI / 180; 
-
-//moons
-const titan = new THREE.Mesh(
-    new THREE.SphereGeometry(0.404, 32, 32),
-    new THREE.MeshStandardMaterial({
-        map: textures.saturn.titanTexture
-    })
-);
-const rhea = new THREE.Mesh(
-    new THREE.SphereGeometry(0.120, 32, 32),
-    new THREE.MeshStandardMaterial({
-        map: textures.saturn.rheaTexture
-    })
-);
-const lapetus = new THREE.Mesh(
-    new THREE.SphereGeometry(0.115, 32, 32),
-    new THREE.MeshStandardMaterial({
-        map: textures.saturn.lapetusTexture
-    })
-);
-const dione = new THREE.Mesh(
-    new THREE.SphereGeometry(0.09, 32, 32),
-    new THREE.MeshStandardMaterial({
-        map: textures.saturn.dioneTexture
-    })
-);
-const tethys = new THREE.Mesh(
-    new THREE.SphereGeometry(0.085, 32, 32),
-    new THREE.MeshStandardMaterial({
-        map: textures.saturn.tethysTexture
-    })
-);
-
-saturnGroup.add(saturn, saturnRing, titan, rhea, lapetus, dione, tethys);
-
-/**
- * URANUS
- */
-const uranusGroup = new THREE.Group();
-const uranus = new THREE.Mesh(
-    new THREE.SphereGeometry(3.95, 64, 64),
-    new THREE.MeshStandardMaterial({
-        map: textures.uranus.uranusTexture
-    })
-)
-uranus.rotation.x = 98 * Math.PI / 180
-
-const titania = new THREE.Mesh(
-    new THREE.SphereGeometry(0.124, 32, 32),
-    new THREE.MeshStandardMaterial({
-        map: textures.uranus.titaniaTexture
-    })
-)
-const oberon = new THREE.Mesh(
-    new THREE.SphereGeometry(0.119, 32, 32),
-    new THREE.MeshStandardMaterial({
-        map: textures.uranus.oberonTexture
-    })
-)
-
-const umbriel = new THREE.Mesh(
-    new THREE.SphereGeometry(0.092, 32, 32),
-    new THREE.MeshStandardMaterial({
-        map: textures.uranus.umbrielTexture
-    })
-)
-
-const ariel = new THREE.Mesh(
-    new THREE.SphereGeometry(0.091, 32, 32),
-    new THREE.MeshStandardMaterial({
-        map: textures.uranus.arielTexture
-    })
-)
-uranusGroup.add(uranus, titania, oberon, umbriel, ariel)
-
-/**
- * NEPTUNE
- */
-const neptuneGroup = new THREE.Group();
-const neptune = new THREE.Mesh(
-    new THREE.SphereGeometry(3.88, 64, 64),
-    new THREE.MeshStandardMaterial({
-        map: textures.neptune.neptuneTexture
-    })
-)
-neptuneGroup.position.z = 1900
-neptune.rotation.x = 28 * Math.PI / 180
-
-const triton = new THREE.Mesh(
-    new THREE.SphereGeometry(0.212, 32, 32),
-    new THREE.MeshStandardMaterial({
-        map: textures.neptune.tritonTexture
-    })
-)
-neptuneGroup.add(neptune, triton)
-
-/**
- * SUN
- */
-const sunGeometry = new THREE.SphereGeometry(15, 32, 32)
-const sun = new THREE.Mesh(
-    sunGeometry,
-    new THREE.MeshBasicMaterial({
-    map: textures.sun.sunTexture
-})
-)
-
-const sunGlowMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-        'c': { type: 'f', value: 1.0 },
-        'p': { type: 'f', value: 1.4 },
-        glowColor: { type: 'c', value: new THREE.Color(0xff6700) },
-        viewVector: { type: 'v3', value: camera.position }
-    },
-    vertexShader: sunVertexShader,
-    fragmentShader: sunFragmentShader,
-    side: THREE.FrontSide,
-    blending: THREE.AdditiveBlending,
-    transparent: true
-});
-
-const sunGlow = new THREE.Mesh(sunGeometry.clone(), sunGlowMaterial);
-sunGlow.scale.multiplyScalar(1.05);
 
 scene.add(sun, sunGlow, earthGroup, mercury, venusGroup, marsGroup, jupiterGroup, saturnGroup, uranusGroup, neptuneGroup)
 
@@ -492,7 +178,6 @@ moonBtn.forEach(button => {
     active.className += ' moon-active'
     });
 });
-
 
 // Resize
 window.addEventListener('resize', () => {
