@@ -9,7 +9,7 @@ export const data = {
         uranus: 0.147749981,
         neptune: 0.157079633,
         moon: 0.00383,
-        otherMoons: 0.1
+        otherMoons: 0.05
     },
     orbitSpeed: {
         earth: 0.000286903,

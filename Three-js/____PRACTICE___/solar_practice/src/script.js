@@ -2,17 +2,24 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "lil-gui";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
 import { data } from "./data/data"; 
+import { textures } from "./data/textures";
+import { orbit, rotate, updateMoonRotations } from "./data/utilities";
+import {info} from "./data/planetInfo.js"
+
+import sunVertexShader from "./shaders/sunGlow/vertex.glsl"
+import sunFragmentShader from "./shaders/sunGlow/fragment.glsl"
 
 // GUI
 const gui = new GUI();
 
 // Elements
 const canvas = document.querySelector("canvas.webgl");
-const saturnBtn = document.querySelector(".container");
-const moonBtn = document.querySelector(".containerTwo"); 
+const planetBtn = document.querySelectorAll(".heading");
+const moonBtn = document.querySelectorAll(".moonGroup button"); 
+const infoPanel = document.querySelector(".info-text")
+const infoHeading = document.querySelector(".info-heading");
 
 // Scene
 const scene = new THREE.Scene();
@@ -42,86 +49,11 @@ textureLoader.load('/textures/solar/milky-way.jpg', (envMap) => {
 })
 scene.backgroundIntensity = 0.04
 
-// Earth - texture
-const earthTexture = textureLoader.load('textures/solar/earth/earth.jpg');
-earthTexture.colorSpace = THREE.SRGBColorSpace;
-
-const earthNormalTexture = textureLoader.load('textures/solar/earth/earth_normal.jpg');
-const oceanTexture = textureLoader.load('textures/solar/earth/ocean.png');
-const cloudsMap = textureLoader.load('textures/solar/earth/earth_clouds.jpg');
-const earthNightLights = textureLoader.load('textures/solar/earth/earth_night.jpg');
-const earthBumpMap = textureLoader.load('textures/solar/earth/earth_bumps.jpg');
-
-// Mercury
-const mercuryTexture = textureLoader.load('textures/solar/mercury/mercury.jpg')
-mercuryTexture.colorSpace = THREE.SRGBColorSpace
-// Venus - texture
-const venusTexture = textureLoader.load('textures/solar/venus/venus.jpg')
-venusTexture.colorSpace = THREE.SRGBColorSpace
-
-const venusAtmosphereTexture = textureLoader.load('textures/solar/venus/venus_atmosphere.jpg')
-
-// Jupiter - texture
-const jupiterTexture = textureLoader.load('textures/solar/jupiter/jupiter.jpg')
-jupiterTexture.colorSpace = THREE.SRGBColorSpace
-
-const europaTexture = textureLoader.load('textures/solar/jupiter/europa.webp')
-europaTexture.colorSpace = THREE.SRGBColorSpace
-
-const callistoTexture = textureLoader.load('textures/solar/jupiter/callisto.jpg')
-callistoTexture.colorSpace = THREE.SRGBColorSpace
-
-const ganymedeTexture = textureLoader.load('textures/solar/jupiter/ganymede.jpg')
-ganymedeTexture.colorSpace = THREE.SRGBColorSpace
-
-const ioTexture = textureLoader.load('textures/solar/jupiter/io.jpg')
-ioTexture.colorSpace = THREE.SRGBColorSpace
-
-// Mars - texture
-const marsTexture = textureLoader.load('textures/solar/mars/mars.jpg')
-marsTexture.colorSpace = THREE.SRGBColorSpace
-
-// Saturn - texture
-const saturnTexture = textureLoader.load('textures/solar/saturn/saturn.jpg')
-saturnTexture.colorSpace = THREE.SRGBColorSpace
-
-const saturnRingTexture = textureLoader.load('textures/solar/saturn/saturn_ring.png')
-saturnRingTexture.colorSpace = THREE.SRGBColorSpace
-
-// Saturn - moons
-const lapetusTexture = textureLoader.load('textures/solar/saturn/lapetus.jpg')
-const rheaTexture = textureLoader.load('textures/solar/saturn/rhea.jpg')
-const titanTexture = textureLoader.load('textures/solar/saturn/titan.jpg')
-const tethysTexture = textureLoader.load('textures/solar/saturn/tethys.jpg')
-const dioneTexture = textureLoader.load('textures/solar/saturn/dione.jpg')
-
-// Uranus - texture
-const uranusTexture = textureLoader.load('textures/solar/uranus/uran.jpg')
-uranusTexture.colorSpace = THREE.SRGBColorSpace
-
-const titaniaTexture = textureLoader.load('textures/solar/uranus/titania.jpg')
-const oberonTexture = textureLoader.load('textures/solar/uranus/oberon.jpg')
-const umbrielTexture = textureLoader.load('textures/solar/uranus/umbriel.jpg')
-const arielTexture = textureLoader.load('textures/solar/uranus/ariel.png')
-
-// Neptune - texture
-const neptuneTexture = textureLoader.load('textures/solar/neptune/neptun.jpg')
-neptuneTexture.colorSpace = THREE.SRGBColorSpace
-
-const tritonTexture = textureLoader.load('textures/solar/neptune/triton.jpg')
-
-
-// Sun - texture    
-const sunTexture = textureLoader.load('textures/solar/sun/sun.jpg')
-sunTexture.colorSpace = THREE.SRGBColorSpace
-
 /**
  * Camera
  * */
 const camera = new THREE.PerspectiveCamera(65, sizes.width / sizes.height, 0.1, 4000);
 camera.position.set(160,2,2)
-
-scene.add(camera);
 
 /**
  * OBJECTS
@@ -130,37 +62,34 @@ scene.add(camera);
 // Earth Group
 const earthGroup = new THREE.Group();
 earthGroup.rotation.x = -23.4 * Math.PI / 180
-scene.add(earthGroup);
 
 // Earth    
 const earthGeometry = new THREE.SphereGeometry(1, 64, 64);
 const earth = new THREE.Mesh(
     earthGeometry,
     new THREE.MeshStandardMaterial({
-        map: earthTexture,
-        normalMap: earthNormalTexture,
-        bumpMap: earthBumpMap,
-        metalnessMap: oceanTexture,
+        map: textures.earth.earthTexture,
+        normalMap: textures.earth.earthNormalTexture,
+        bumpMap: textures.earth.earthBumpMap,
+        metalnessMap: textures.earth.oceanTexture,
     })
 );
-earthGroup.add(earth);
 
 // Light Mesh
 const lightMesh = new THREE.Mesh(
     earthGeometry,
     new THREE.MeshBasicMaterial({
-        map: earthNightLights,
+        map: textures.earth.earthNightLights,
         blending: THREE.AdditiveBlending,
         color: new THREE.Color(0x606060)
     })
 );
-earthGroup.add(lightMesh)
 
 // Clouds
 const clouds = new THREE.Mesh(
     new THREE.SphereGeometry(1.01, 64, 64),
     new THREE.MeshStandardMaterial({
-        map: cloudsMap,
+        map: textures.earth.cloudsMap,
         transparent: true,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
@@ -168,37 +97,33 @@ const clouds = new THREE.Mesh(
         opacity: 0.9,
     })
 );
-earthGroup.add(clouds);
 
 // Moon
 const moon = new THREE.Mesh(
     new THREE.SphereGeometry(0.267, 32, 32),
     new THREE.MeshStandardMaterial({
-        map: textureLoader.load('textures/solar/earth/moon.jpg')
+        map: textures.earth.moonTexture
     })
 )
-earthGroup.add(moon);
-
-camera.lookAt(earthGroup.position)  
+earthGroup.add(earth, moon, clouds, lightMesh);
 
 /**
  * VENUS
  *  */ 
 const venusGroup = new THREE.Group()
 venusGroup.rotation.x =  -177 * Math.PI / 180
-scene.add(venusGroup)
 
 const venus = new THREE.Mesh(
     new THREE.SphereGeometry(0.95, 32,32),
     new THREE.MeshStandardMaterial({
-        map: venusTexture,
+        map: textures.venus.venusTexture,
     })
 )
 
 const venusAtmosphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.95, 32,32), 
     new THREE.MeshStandardMaterial({
-        map: venusAtmosphereTexture,
+        map: textures.venus.venusAtmosphereTexture,
         blending: THREE.AdditiveBlending,
         transparent: true,
         opacity: 0.45
@@ -212,11 +137,9 @@ venusGroup.add(venus,venusAtmosphere);
 const mercury = new THREE.Mesh(
     new THREE.SphereGeometry(0.38, 32, 32),
     new THREE.MeshStandardMaterial({
-        map: textureLoader.load('textures/solar/mercury/mercury.jpg')
+        map: textures.mercury.mercuryTexture
     })
 )
-mercury.position.y = 0.5
-scene.add(mercury) 
 
 /**
  * MARS
@@ -227,7 +150,7 @@ const marsGroup = new THREE.Group()
 const mars = new THREE.Mesh(
     new THREE.SphereGeometry(0.532, 32, 32),
     new THREE.MeshStandardMaterial({
-        map: marsTexture
+        map: textures.mars.marsTexture
     })
 )
 mars.rotation.x = -25 * Math.PI / 180
@@ -255,8 +178,6 @@ gltfLoader.load(
     },
 )
 
-scene.add(marsGroup);
-
 /**
  * Jupiter
  */
@@ -264,7 +185,7 @@ const jupiterGroup = new THREE.Group()
 const jupiter = new THREE.Mesh(
     new THREE.SphereGeometry(11.2, 128, 128),
     new THREE.MeshStandardMaterial({
-        map: jupiterTexture
+        map: textures.jupiter.jupiterTexture
     })
 )
 jupiter.rotation.x = -3.13 * Math.PI / 180
@@ -273,34 +194,31 @@ jupiter.rotation.x = -3.13 * Math.PI / 180
 const europa = new THREE.Mesh(
     new THREE.SphereGeometry(0.245, 32, 32),
     new THREE.MeshStandardMaterial({
-        map: europaTexture
+        map: textures.jupiter.europaTexture
     })
 )
 
 const callisto = new THREE.Mesh(
     new THREE.SphereGeometry(0.378, 32,32),
     new THREE.MeshStandardMaterial({
-        map: callistoTexture
+        map: textures.jupiter.callistoTexture
     })
 )
 
 const ganymede = new THREE.Mesh(
     new THREE.SphereGeometry(0.413, 32,32),
     new THREE.MeshStandardMaterial({
-        map: ganymedeTexture
+        map: textures.jupiter.ganymedeTexture
     })
 )
 
 const io = new THREE.Mesh(
     new THREE.SphereGeometry(0.286, 32,32),
     new THREE.MeshStandardMaterial({
-        map: ioTexture
+        map: textures.jupiter.ioTexture
     })
 )
-
 jupiterGroup.add(europa, callisto, io, ganymede)
-scene.add(jupiterGroup)
-
 
 /**
  * Saturn
@@ -309,7 +227,7 @@ const saturnGroup = new THREE.Group();
 const saturn = new THREE.Mesh(
     new THREE.SphereGeometry(9, 64, 64),
     new THREE.MeshStandardMaterial({
-        map: saturnTexture
+        map: textures.saturn.saturnTexture
     })
 )
 saturn.rotation.x = 26.73 * Math.PI / 180
@@ -329,7 +247,7 @@ adjustRingGeometry(saturnRingGeometry);
 
 const saturnRing = new THREE.Mesh(saturnRingGeometry, 
     new THREE.MeshBasicMaterial({
-        map: saturnRingTexture,
+        map: textures.saturn.saturnRingTexture,
         side: THREE.DoubleSide,
         transparent: true
     })
@@ -341,39 +259,35 @@ saturnRing.rotation.x = -63.27 * Math.PI / 180;
 const titan = new THREE.Mesh(
     new THREE.SphereGeometry(0.404, 32, 32),
     new THREE.MeshStandardMaterial({
-        map: titanTexture
+        map: textures.saturn.titanTexture
     })
 );
 const rhea = new THREE.Mesh(
     new THREE.SphereGeometry(0.120, 32, 32),
     new THREE.MeshStandardMaterial({
-        map: rheaTexture
+        map: textures.saturn.rheaTexture
     })
 );
 const lapetus = new THREE.Mesh(
     new THREE.SphereGeometry(0.115, 32, 32),
     new THREE.MeshStandardMaterial({
-        map: lapetusTexture
+        map: textures.saturn.lapetusTexture
     })
 );
 const dione = new THREE.Mesh(
     new THREE.SphereGeometry(0.09, 32, 32),
     new THREE.MeshStandardMaterial({
-        map: dioneTexture
+        map: textures.saturn.dioneTexture
     })
 );
 const tethys = new THREE.Mesh(
     new THREE.SphereGeometry(0.085, 32, 32),
     new THREE.MeshStandardMaterial({
-        map: tethysTexture
+        map: textures.saturn.tethysTexture
     })
 );
 
 saturnGroup.add(saturn, saturnRing, titan, rhea, lapetus, dione, tethys);
-
-scene.add(saturnGroup);
-
-camera.lookAt(saturnGroup.position);
 
 /**
  * URANUS
@@ -382,7 +296,7 @@ const uranusGroup = new THREE.Group();
 const uranus = new THREE.Mesh(
     new THREE.SphereGeometry(3.95, 64, 64),
     new THREE.MeshStandardMaterial({
-        map: uranusTexture
+        map: textures.uranus.uranusTexture
     })
 )
 uranus.rotation.x = 98 * Math.PI / 180
@@ -390,32 +304,30 @@ uranus.rotation.x = 98 * Math.PI / 180
 const titania = new THREE.Mesh(
     new THREE.SphereGeometry(0.124, 32, 32),
     new THREE.MeshStandardMaterial({
-        map: titaniaTexture
+        map: textures.uranus.titaniaTexture
     })
 )
 const oberon = new THREE.Mesh(
     new THREE.SphereGeometry(0.119, 32, 32),
     new THREE.MeshStandardMaterial({
-        map: oberonTexture
+        map: textures.uranus.oberonTexture
     })
 )
 
 const umbriel = new THREE.Mesh(
     new THREE.SphereGeometry(0.092, 32, 32),
     new THREE.MeshStandardMaterial({
-        map: umbrielTexture
+        map: textures.uranus.umbrielTexture
     })
 )
 
 const ariel = new THREE.Mesh(
     new THREE.SphereGeometry(0.091, 32, 32),
     new THREE.MeshStandardMaterial({
-        map: arielTexture
+        map: textures.uranus.arielTexture
     })
 )
 uranusGroup.add(uranus, titania, oberon, umbriel, ariel)
-
-scene.add(uranusGroup)
 
 /**
  * NEPTUNE
@@ -424,7 +336,7 @@ const neptuneGroup = new THREE.Group();
 const neptune = new THREE.Mesh(
     new THREE.SphereGeometry(3.88, 64, 64),
     new THREE.MeshStandardMaterial({
-        map: neptuneTexture
+        map: textures.neptune.neptuneTexture
     })
 )
 neptuneGroup.position.z = 1900
@@ -433,12 +345,10 @@ neptune.rotation.x = 28 * Math.PI / 180
 const triton = new THREE.Mesh(
     new THREE.SphereGeometry(0.212, 32, 32),
     new THREE.MeshStandardMaterial({
-        map: tritonTexture
+        map: textures.neptune.tritonTexture
     })
 )
-
 neptuneGroup.add(neptune, triton)
-scene.add(neptuneGroup)
 
 /**
  * SUN
@@ -447,7 +357,7 @@ const sunGeometry = new THREE.SphereGeometry(15, 32, 32)
 const sun = new THREE.Mesh(
     sunGeometry,
     new THREE.MeshBasicMaterial({
-    map: sunTexture
+    map: textures.sun.sunTexture
 })
 )
 
@@ -458,26 +368,8 @@ const sunGlowMaterial = new THREE.ShaderMaterial({
         glowColor: { type: 'c', value: new THREE.Color(0xff6700) },
         viewVector: { type: 'v3', value: camera.position }
     },
-    vertexShader: `
-        uniform vec3 viewVector;
-        uniform float c;
-        uniform float p;
-        varying float intensity;
-        void main() {
-            vec3 vNormal = normalize( normalMatrix * normal );
-            vec3 vNormel = normalize( normalMatrix * viewVector );
-            intensity = pow( c - dot(vNormal, vNormel), p );
-            gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-        }
-    `,
-    fragmentShader: `
-        uniform vec3 glowColor;
-        varying float intensity;
-        void main() {
-            vec3 glow = glowColor * intensity;
-            gl_FragColor = vec4( glow, 1.0 );
-        }
-    `,
+    vertexShader: sunVertexShader,
+    fragmentShader: sunFragmentShader,
     side: THREE.FrontSide,
     blending: THREE.AdditiveBlending,
     transparent: true
@@ -486,25 +378,14 @@ const sunGlowMaterial = new THREE.ShaderMaterial({
 const sunGlow = new THREE.Mesh(sunGeometry.clone(), sunGlowMaterial);
 sunGlow.scale.multiplyScalar(1.05);
 
-scene.add(sunGlow);
-scene.add(sun)
+scene.add(sun, sunGlow, earthGroup, mercury, venusGroup, marsGroup, jupiterGroup, saturnGroup, uranusGroup, neptuneGroup)
 
-sun.castShadow = true;
-earthGroup.castShadow = true;
-mercury.castShadow = true;
-venus.castShadow = true;
-mars.castShadow = true;
-jupiter.castShadow = true;
-uranus.castShadow = true;
-neptune.castShadow = true;
-
-earthGroup.receiveShadow = true;
-mercury.receiveShadow = true;
-venus.receiveShadow = true;
-mars.receiveShadow = true;
-jupiter.receiveShadow = true;
-uranus.receiveShadow = true;
-neptune.receiveShadow = true;
+// Planet shadows
+const planetsShadows = [sun, earthGroup, mercury, venus, mars, jupiter, uranus, neptune, camera];
+planetsShadows.forEach(planet => {
+    planet.receiveShadow = true;
+    planet.castShadow = true;
+});
 
 /**
  * LIGHTS
@@ -562,15 +443,55 @@ const moons = {
 let selectedMoon = null;
 let selectedPlanet = null;
 
-saturnBtn.addEventListener('click', (event) => {
-    selectedMoon = null;
-    selectedPlanet = event.target.textContent
-    controls.target.copy(planets[selectedPlanet].position);
-    controls.update();
+planetBtn.forEach(planet => {
+    planet.addEventListener('click', (event) => {
+
+        if (selectedPlanet){
+            const moonToHide = document.getElementById(`${selectedPlanet}`)
+            moonToHide.style.display = 'none';
+    
+            const removeActiveClass = document.getElementById(`planet-${selectedPlanet}`);
+            removeActiveClass.className = 'heading'
+        }
+    
+        if (selectedMoon){
+            const removeActiveClass = document.getElementById(`moon-${selectedMoon}`);
+            removeActiveClass.className = 'moons'
+        }
+    
+        selectedMoon = null;
+        selectedPlanet = event.target.textContent
+    
+        infoHeading.textContent = `${selectedPlanet}`
+        infoHeading.style.textTransform = "uppercase"
+        infoPanel.textContent = info[selectedPlanet];
+    
+        controls.target.copy(planets[selectedPlanet].position);
+        controls.update();
+    
+        const active = document.getElementById(`planet-${selectedPlanet}`);
+        active.className += ' active'
+    
+        const moons = document.getElementById(`${selectedPlanet}`);
+        moons.style.display = 'flex';
+    })
 })
-moonBtn.addEventListener('click', (event) => {
-    selectedMoon = event.target.textContent
-})
+
+moonBtn.forEach(button => {
+    button.addEventListener('click', (event) => {
+        if (selectedMoon){
+            const removeActiveClass = document.getElementById(`moon-${selectedMoon}`);
+            removeActiveClass.className = 'moons'
+        }
+        selectedMoon = event.target.textContent;
+        infoHeading.textContent = `${selectedMoon}`
+        infoHeading.style.textTransform = "uppercase"
+        infoPanel.textContent = info[selectedMoon];
+
+    const active = document.getElementById(`moon-${selectedMoon}`);
+    active.className += ' moon-active'
+    });
+});
 
 
 // Resize
@@ -618,75 +539,45 @@ function tick() {
         camera.position.x -= 1
         camera.lookAt(pos);
     }
-    /**
-    }
+
+    // Orbit rotation
+    orbit(earthGroup, 150, data.orbitSpeed.earth, elapsedTime);
+    orbit(mercury, 58.5, data.orbitSpeed.mercury, elapsedTime);
+    orbit(venusGroup, 108, data.orbitSpeed.venus, elapsedTime);
+    orbit(marsGroup, 228, data.orbitSpeed.mars, elapsedTime);
+    orbit(jupiterGroup, 780, data.orbitSpeed.jupiter, elapsedTime);
+    orbit(saturnGroup, 1437, data.orbitSpeed.saturn, elapsedTime);
+    orbit(uranusGroup, 2883, data.orbitSpeed.uranus, elapsedTime);
+    orbit(neptuneGroup, 4507, data.orbitSpeed.neptune, elapsedTime);
+
+    orbit(moon, 4, data.orbitSpeed.moon, elapsedTime);
+
+    // Axis Rotation
+    rotate(earth, data.angularSpeed.earth);
+    rotate(clouds, data.angularSpeed.earth);
+    rotate(lightMesh, data.angularSpeed.earth);
+    rotate(moon, data.angularSpeed.moon);
+
+    rotate(mercury, data.angularSpeed.mercury);
+
+    rotate(venus, data.angularSpeed.venus);
+    rotate(venusAtmosphere, data.angularSpeed.venus);
+
+    rotate(mars, data.angularSpeed.mars);
+
+    rotate(jupiter, data.angularSpeed.jupiter);
+
+    rotate(saturn, data.angularSpeed.saturn);
+
+    rotate(uranus, data.angularSpeed.uranus);
+
+    rotate(neptune, data.angularSpeed.neptune);
     
-     * 
-     * Animate Objects
-     * 
-     *  */ 
-    // Earth Orbit 
-    earthGroup.position.x = Math.cos(data.orbitSpeed.earth * elapsedTime) * 150
-    earthGroup.position.z = Math.sin(data.orbitSpeed.earth * elapsedTime) * 150
-
-    // Mercury Orbit
-    mercury.position.x = Math.cos(data.orbitSpeed.mercury * elapsedTime) * 58.5
-    mercury.position.z = Math.sin(data.orbitSpeed.mercury * elapsedTime) * 58.5
-
-    // Venus Orbit
-    venusGroup.position.x = Math.cos(data.orbitSpeed.venus * elapsedTime) * 108
-    venusGroup.position.z = Math.sin(data.orbitSpeed.venus * elapsedTime) * 108
-
-    // Mars Orbit
-    marsGroup.position.x = Math.cos(data.orbitSpeed.mars * elapsedTime) * 228
-    marsGroup.position.z = Math.sin(data.orbitSpeed.mars * elapsedTime) * 228
-
-    // Jupiter Orbit
-    jupiterGroup.position.x = Math.cos(data.orbitSpeed.jupiter * elapsedTime) * 780
-    jupiterGroup.position.z = Math.sin(data.orbitSpeed.jupiter * elapsedTime) * 780
-
-    // Saturn Orbit
-    saturnGroup.position.x = Math.cos(data.orbitSpeed.saturn * elapsedTime) * 1437
-    saturnGroup.position.z = Math.sin(data.orbitSpeed.saturn * elapsedTime) * 1437
-
-    // Uranus Orbit
-    uranusGroup.position.x = Math.cos(data.orbitSpeed.uranus * elapsedTime) * 2883
-    uranusGroup.position.z = Math.sin(data.orbitSpeed.uranus * elapsedTime) * 2883
-
-    // Neptune Orbit
-    neptuneGroup.position.x = Math.cos(data.orbitSpeed.neptune * elapsedTime) * 4507
-    neptuneGroup.position.z = Math.sin(data.orbitSpeed.neptune * elapsedTime) * 4507
-
-
-    // Earth Axis Rotation
-    earth.rotation.y += data.angularSpeed.earth * (1 / 60);
-    clouds.rotation.y += data.angularSpeed.earth * (1 / 60);
-    lightMesh.rotation.y += data.angularSpeed.earth * (1 / 60);
-
-    // Mercury Axis Rotation
-    mercury.rotation.y += data.angularSpeed.mercury * (1 / 60);
-
-    // Venus Axis Rotation
-    venus.rotation.y += data.angularSpeed.venus * (1 / 60)
-    venusAtmosphere.rotation.y += data.angularSpeed.venus * (1 / 60)
-
-
-    // Moon Axis Rotation
-    moon.rotation.y += data.angularSpeed.moon * (1 / 60)
-    // Moon Orbit
-    const orbitRadius = 4; // Example radius
-    moon.position.x = Math.cos(data.orbitSpeed.moon * elapsedTime) * orbitRadius;
-    moon.position.z = Math.sin(data.orbitSpeed.moon * elapsedTime) * orbitRadius;
-
-    // Mars axis
-    mars.rotation.y += data.angularSpeed.mars * (1 / 60)
     // Phobos orbit axis
     if (phobos){
         moons.phobos = phobos
         marsGroup.add(phobos)
-        phobos.position
-        phobos.position.x = Math.cos(data.orbitSpeed.phobos * elapsedTime) * 2;
-        phobos.position.z = Math.sin(data.orbitSpeed.phobos * elapsedTime) * 2;
+        orbit(phobos, 2, data.orbitSpeed.phobos, elapsedTime);
         phobos.position.y = Math.sin(data.orbitSpeed.phobos * elapsedTime) * -1
 
         phobos.rotation.y += data.orbitSpeed.phobos * (1 / 60)
@@ -695,95 +586,32 @@ function tick() {
     if (deimos){
         moons.deimos = deimos
         marsGroup.add(deimos)
-        deimos.position.x = Math.cos(data.orbitSpeed.deimos * elapsedTime) * 3;
-        deimos.position.z = Math.sin(data.orbitSpeed.deimos * elapsedTime) * 3;
+        orbit(deimos, 3, data.orbitSpeed.deimos, elapsedTime);
         deimos.position.y = Math.sin(data.orbitSpeed.deimos * elapsedTime) * 0.5
 
         deimos.rotation.y += data.orbitSpeed.deimos * (1 / 60)
     }
 
-    // Jupiter axis
-    jupiter.rotation.y += data.angularSpeed.jupiter * (1 / 60)
+    orbit(europa, 35, data.orbitSpeed.europa, elapsedTime, -12);
+    orbit(callisto, 60, data.orbitSpeed.callisto, elapsedTime, 20);
+    orbit(io, 20, data.orbitSpeed.io, elapsedTime, 10);
+    orbit(ganymede, 50, data.orbitSpeed.ganymede, elapsedTime, 35);
 
-    europa.position.x = Math.sin(data.orbitSpeed.europa * elapsedTime) * 35
-    europa.position.z = Math.cos(data.orbitSpeed.europa * elapsedTime) * 35
-    europa.position.y = Math.sin(data.orbitSpeed.europa * elapsedTime) * -12 
+    orbit(titan, 51, data.orbitSpeed.titan, elapsedTime, 5);
+    orbit(rhea, 22, data.orbitSpeed.rhea, elapsedTime, 10);
+    orbit(lapetus, 90, data.orbitSpeed.lapetus, elapsedTime, 13);
+    orbit(dione, 23, data.orbitSpeed.dione, elapsedTime, -9);
+    orbit(tethys, 21, data.orbitSpeed.tethys, elapsedTime, 25);
 
-    callisto.position.x = Math.sin(data.orbitSpeed.callisto * elapsedTime) * 60
-    callisto.position.z = Math.cos(data.orbitSpeed.callisto * elapsedTime) * 60
-    callisto.position.y = Math.sin(data.orbitSpeed.callisto * elapsedTime) * 20 
+    orbit(titania, 16, data.orbitSpeed.titania, elapsedTime, 5);
+    orbit(oberon, 21.5, data.orbitSpeed.oberon, elapsedTime, 12);
+    orbit(umbriel, 9, data.orbitSpeed.umbriel, elapsedTime, -3);
+    orbit(ariel, 7, data.orbitSpeed.ariel, elapsedTime, 1);
 
-    io.position.x = Math.sin(data.orbitSpeed.io * elapsedTime) * 20
-    io.position.z = Math.cos(data.orbitSpeed.io * elapsedTime) * 20
-    io.position.y = Math.sin(data.orbitSpeed.io * elapsedTime) * 10
-
-    ganymede.position.x = Math.sin(data.orbitSpeed.ganymede * elapsedTime) * 50
-    ganymede.position.z = Math.cos(data.orbitSpeed.ganymede * elapsedTime) * 50
-    ganymede.position.y = Math.sin(data.orbitSpeed.ganymede * elapsedTime) * 35
-
-    // Saturn axis
-    saturn.rotation.y += data.angularSpeed.saturn * (1 / 60)
-
-    titan.position.x = Math.sin(data.orbitSpeed.titan * elapsedTime) * 51
-    titan.position.z = Math.cos(data.orbitSpeed.titan * elapsedTime) * 51
-    titan.position.y = Math.sin(data.orbitSpeed.titan * elapsedTime) * 5
-
-    rhea.position.x = Math.sin(data.orbitSpeed.rhea * elapsedTime) * 22
-    rhea.position.z = Math.cos(data.orbitSpeed.rhea * elapsedTime) * 22
-    rhea.position.y = Math.sin(data.orbitSpeed.rhea * elapsedTime) * 10
-
-    lapetus.position.x = Math.sin(data.orbitSpeed.lapetus * elapsedTime) * 90
-    lapetus.position.z = Math.cos(data.orbitSpeed.lapetus * elapsedTime) * 90
-    lapetus.position.y = Math.sin(data.orbitSpeed.lapetus * elapsedTime) * 13
-
-    dione.position.x = Math.sin(data.orbitSpeed.dione * elapsedTime) * 23
-    dione.position.z = Math.cos(data.orbitSpeed.dione * elapsedTime) * 23
-    dione.position.y = Math.sin(data.orbitSpeed.dione * elapsedTime) * -9
-
-    tethys.position.x = Math.sin(data.orbitSpeed.tethys * elapsedTime) * 21
-    tethys.position.z = Math.cos(data.orbitSpeed.tethys * elapsedTime) * 21
-    tethys.position.y = Math.sin(data.orbitSpeed.tethys * elapsedTime) * 25
-
-    // Uranus
-    uranus.rotation.y += data.angularSpeed.uranus * (1 / 60)
-
-    titania.position.x = Math.sin(data.orbitSpeed.titania * elapsedTime) * 16
-    titania.position.z = Math.cos(data.orbitSpeed.titania * elapsedTime) * 16
-    titania.position.y = Math.sin(data.orbitSpeed.titania * elapsedTime) * 5
-
-    oberon.position.x = Math.sin(data.orbitSpeed.oberon * elapsedTime) * 21.5
-    oberon.position.z = Math.cos(data.orbitSpeed.oberon * elapsedTime) * 21.5
-    oberon.position.y = Math.sin(data.orbitSpeed.oberon * elapsedTime) * 12
-
-    umbriel.position.x = Math.sin(data.orbitSpeed.umbriel * elapsedTime) * 9
-    umbriel.position.z = Math.cos(data.orbitSpeed.umbriel * elapsedTime) * 9
-    umbriel.position.y = Math.sin(data.orbitSpeed.umbriel * elapsedTime) * -3
-
-    ariel.position.x = Math.sin(data.orbitSpeed.ariel * elapsedTime) * 7
-    ariel.position.z = Math.cos(data.orbitSpeed.ariel * elapsedTime) * 7
-
-    // Neptune
-    neptune.rotation.y += data.angularSpeed.neptune * (1 / 60)
-
-    triton.position.x = Math.sin(data.orbitSpeed.triton * elapsedTime) * 13
-    triton.position.z = Math.cos(data.orbitSpeed.triton * elapsedTime) * 13
-    triton.position.y = Math.sin(data.orbitSpeed.triton * elapsedTime) * -5
+    orbit(triton, 13, data.orbitSpeed.triton, elapsedTime, 5);
 
     // Rest of the moons axis
-    europa.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
-    callisto.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
-    io.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
-    ganymede.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
-    titan.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
-    rhea.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
-    lapetus.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
-    dione.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
-    tethys.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
-    titania.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
-    oberon.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
-    umbriel.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
-    ariel.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
-    triton.rotation.y += data.angularSpeed.otherMoons * (1 / 60)
+    updateMoonRotations(moons, data.angularSpeed.otherMoons);
 
     // Render
     renderer.render(scene, camera);
