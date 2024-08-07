@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Playwrite+BE+VLG:wght@100..400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Zain:wght@200;300;400;700;800;900&display=swap');
+:root{
+    --primary-color-yellow: #F4CE14;
+    --primary-color-dark: #45474B;
+    --primary-color-dark-high: #1D1E20;
+    --primary-color-dark-lowOpacity: rgba(69, 71, 75, 0.5); 
+    --secondary-color: #379777;
+    --font-color: #F5F7F8;
+    --font-color-dark: #1D1F20;
+}
+body{
+    margin: 0;
+    overflow-x: hidden;
+    width: 100vw;
+    padding: 0;
+}
+li{
+    list-style: none;
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}
+*{
+    box-sizing: border-box;
+}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<style>
+    body{
+        background: #f8deb7;
+    }
+    .dates{
+        border: 10px solid #cdb592;
+        width: 60%;
+        margin: auto;
+        height: 70vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #date{
+        font-size: 40px;
+        color: black;
+    }
+    button{
+        width: 250px;
+        height: 80px;
+        font-size: 27px;
+        text-transform: uppercase;
+        border-radius: 20px;
+        border: 3px solid gray;
+        background: white;
+        margin: 50px 44%;
+    }
+    button:active{
+        background: gray;
+        color: white;
+        font-weight: 500;
+    }
+</style>
+    <div class="dates">
+        <p id="date"></p>
+    </div>
+    <button onclick="generate()">Generate date</button>
+
+<script>
+   const dateIdeas = [
+    'Shooting range',
+    'New restaurant in town',
+    'Cook Sushi together',
+    'Outside picnic',
+    'Take a hike',
+    'Play a board game',
+    'Go to casino together',
+    'Paint/Draw each other',
+    'Go to a museum',
+    'Visit the ZOO',
+    'Go for a nice dessert',
+    'Do a baking competition',
+    'Rock climbing',
+    'Go to a water park',
+    'Go to a cocktail bar',
+    'Try some workout together',
+    'Go bowling together',
+    'Go skating',
+    'Go to any arcade together',
+    'Try camping',
+    'Throw a party at your place',
+    'tie-dye a shirt together',
+    'Drive go-karts',
+    'Go for an Ice cream',
+    'Go minigolf',
+    'Try golf together',
+    'Try disc-golf together',
+    'Go to art gallery',
+    'Go to an escape room together',
+    'Go to an Amusement Park',
+    'Go to cinema',
+    'Go to spa / wellness',
+
+];
+//generating function:
+const generate = () => {
+    //if there are no more date ideas left ->
+  if (dateIdeas.length === 0) {
+    document.getElementById('date').innerHTML = "No more dates available.";
+    return;
+  }
+  //generate random index ->
+  const randomIndex = Math.floor(Math.random() * dateIdeas.length);
+  const randomQuote = dateIdeas[randomIndex];
+
+  // Remove the generated date from the array ->
+  dateIdeas.splice(randomIndex, 1);
+
+  document.getElementById('date').innerHTML = randomQuote;
+};
+
+    
+
+
+
+</script>
+</body>
+</html>

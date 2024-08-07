@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=;, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<style>
+    .container{
+        width: 75%;
+        height: 90vh;
+        border: solid red;
+        margin: auto; 
+    }
+
+  .image{
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+  img{
+    height: 100%;
+    width: 100%;
+  }
+  .active{
+    opacity: 1;
+  }
+  button{
+    width: 150px;
+    height: 50px;
+    font-size: 20px;
+    color: white;
+    background: gray;
+    border-radius: 10px;
+    border: 2px solid rgb(87, 84, 84);
+  }
+  #prev{
+    left: 100px;
+    top: 50%;
+    position: absolute;
+  }
+  #next{
+    right: 100px;
+    top: 48%;
+    position: absolute;
+  }
+  button:active{
+    background: rgb(49, 46, 46);
+  }
+</style>
+
+    <div class="container">
+        <div class="image">
+            <img src="/Youtube Projects/Image Carousel/images/one.avif" alt="">
+        </div>
+        <div class="image">
+            <img src="/Youtube Projects/Image Carousel/images/two.jpg" alt="">
+        </div>
+        <div class="image active">
+            <img src="/Youtube Projects/Image Carousel/images/three.jpeg" alt="">
+        </div>
+        <div class="image">
+            <img src="/Youtube Projects/Image Carousel/images/for.jpeg" alt="">
+        </div>
+        <div class="image">
+            <img src="/Youtube Projects/Image Carousel/images/five.jpeg" alt="">
+        </div>
+        <div class="image">
+            <img src="/Youtube Projects/Image Carousel/images/six.png" alt="">
+        </div>
+        <button onclick="esketit()" id="prev">Previous</button>
+        <button onclick="" id="next">Next</button>
+        <div class="dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+
+<script>
+    let index = 0;
+    const totalImages = 6;
+    const images = document.getElementsByClassName('.image');
+
+    const esketit = () => {
+        index++;
+        if (index === totalImages - 1){
+            index = 0;
+        };
+        images.forEach(classList.remove('active'));
+
+        images[index].classList.add('active');
+
+    }
+
+</script>
+</body>
+</html>

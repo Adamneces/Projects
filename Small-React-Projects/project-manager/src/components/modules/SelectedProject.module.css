@@ -1,0 +1,38 @@
+.container{
+    width: 550px;
+    margin-top: 64px;
+}
+.header{
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    border-bottom: 2px solid rgb(173, 173, 173);
+}
+.mainHeading{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.title{
+    font-size: 33px;
+    font-weight: 600;
+    color: #09151F;
+    margin-bottom: 8px;
+}
+.button{
+    color: rgb(57, 57, 57);  
+    border: none;
+    border-radius: 6px;
+    box-shadow: 1px 1px 2px grey;
+}
+.button:hover{
+    color: black;
+}
+.paragraphOne{
+    margin-bottom: 16px;
+    color: #6c6e70;
+}
+.paragraphTwo{
+    color: #09151F;
+    white-space: pre-wrap;
+    font-size: 17px;
+}

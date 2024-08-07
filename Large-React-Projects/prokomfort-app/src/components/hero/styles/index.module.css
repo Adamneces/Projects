@@ -1,0 +1,115 @@
+/* Main --------------------------------------------------- */
+.container {
+  background-image: url("../../../assets/hero.webp");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100vh;
+}
+
+/*Header ----------------------------------------------------*/
+
+.container_header {
+  width: 100%;
+  height: 20%;
+  min-height: 80px;
+  max-height: 95px;
+  background: linear-gradient(var(--primary-color-dark), rgba(255, 255, 255, 0.4));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.3s ease;  
+
+  color: var(--font-color);
+}
+.container_header:hover{
+    background-color: var(--primary-color-dark);
+}
+.container_header h1 {
+  font-family: "Orbitron", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  flex-basis: 45%;
+  font-size: 50px;
+  margin: 0;
+  padding-left: 20px;
+}
+.container_header h1 span{
+    background-color: var(--primary-color-dark-high);
+    padding: 8px 6px;
+    border-radius: 6px;
+}
+.container_header ul {
+  display: flex;
+  font-size: 20px;
+  justify-content: space-evenly;
+  flex-basis: 50%;
+  margin: 0;
+  font-family: "Orbitron", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+.container_header ul li{
+  transition: all 0.4s ease;  
+  color: var(--font-color);
+}
+.container_header ul li:hover {
+  cursor: pointer;
+  color: #F4CE14;
+  text-shadow: 0px 0px 1px white;
+}
+
+/*Background -------------------------------------------------*/
+.container_background {
+  width: 100%;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.4);
+}
+.container_background h1{
+    color: var(--font-color-dark);
+    font-family: "Zain", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 140px;
+    width: 80%;
+    max-width: 1400px;
+    line-height: 130px;
+    padding: 20px 30px;
+    text-shadow: 4px 4px 3px rgba(255, 255, 255, 0.501);
+}
+.container_background h1 span{
+    color: #D6B40A;
+    text-shadow: 4px 4px 3px black;
+}
+.container_background button {
+    font-family: "Zain", sans-serif;
+    font-weight: 600;
+    background-color: #256A53;
+    letter-spacing: 2px;
+    color: var(--font-color);
+    font-size: 52px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    transition: background-color 0.3s ease, margin-left 2s ease;
+    position: fixed;
+    transform: translateX(-50%);
+    bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+}
+.container_background button:hover{
+    color: white;
+    background-color: #C3A409 !important;
+    cursor: pointer;
+}
+.container_background button svg {
+  margin: 0;
+}

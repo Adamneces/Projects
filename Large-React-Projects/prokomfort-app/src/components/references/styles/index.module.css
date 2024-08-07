@@ -1,0 +1,86 @@
+.container {
+  width: 100%;
+  height: 600px;
+  background-image: url("../../../assets/reference.jpeg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* SlideContainer --------------------------------------------------- */
+.container_slide_container {
+  width: 80%;
+  max-width: 1200px;
+  height: 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.48);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(7.9px);
+  -webkit-backdrop-filter: blur(7.9px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.container_slide_container button{
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease-in-out;
+    height: 83%;
+}
+.container_slide_container button:hover{
+    cursor: pointer;
+    background: rgba(233,196,12,0.8);
+}
+.container_slide_container button:active{
+    cursor: pointer;
+    background: rgba(233,196,12,1);
+}
+
+/* Slide -------------------------------------------------------------*/
+.container_slide {
+  width: 80%;
+  height: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  color: var(--font-color-dark);
+  padding-right: 15px;
+}
+.container_slide figure {
+  background-color: #45464A;
+  color: var(--font-color);
+  padding: 10px 10px 0 10px;
+  border-radius: 8px;
+}
+.container_slide figure img {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+}
+.container_slide figure figcaption {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container_slide aside p:first-child {
+    font-style: italic;
+    font-size: 24px;
+    font-weight: 600;
+}
+.container_slide aside p:last-child {
+    font-style: normal;
+    font-size: 21px;
+    color: #313235;
+}

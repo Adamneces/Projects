@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="textContainer">
+    <p id="RGB"></p><br>
+    <p id="HEX"></p><br>
+</div>
+  <div class="container">
+    <button onclick="changeColor()" type="button" class="changeButton">Generate</button>
+  </div>
+
+
+
+<script>
+    let r = 0;
+    let g = 0;
+    let b = 0;
+
+    const changeColor = () => {
+        r = Math.round(Math.random() * 255);
+        g = Math.round(Math.random() * 255);
+        b = Math.round(Math.random() * 255);
+
+        const valueToHex = (c) => {
+        let hex = c.toString(16);
+        return hex      
+}
+        const rgbToHex = (r, g, b) => {
+        return(valueToHex(r) + valueToHex(g) + valueToHex(b));
+}
+
+        document.getElementsByTagName('body')[0].style.background = `rgb(${r}, ${g}, ${b})`;
+        document.getElementById('RGB').innerHTML = `rgb(${r}, ${g}, ${b})`;
+        document.getElementById('HEX').innerHTML = 'hex: ' + rgbToHex(r,g,b);
+    }
+    
+
+
+</script>
+</body>
+</html>

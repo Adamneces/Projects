@@ -1,0 +1,76 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    background: #90cbc8;
+}
+.container{
+    background: #ffffff;
+    width: 600px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: solid gray;
+    padding: 80px 50px;
+    border-radius: 15px;
+    box-shadow: 0px 20px 40px rgba(55, 52, 52, 0.2);
+}
+.search-box{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.search-box input{
+    padding: 7px;
+    border: none;
+    outline: 0;
+    border-bottom: 2px solid #559091;
+    width: 72%;
+    font-size: 16px;
+}
+.search-box button{
+    width: 22%;
+    padding: 10 px 0;
+    background-color: #739899;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 17px;
+    outline: none;
+}
+.sound-btn{
+    border: none;
+    background: none;
+}
+.result{
+    position: relative;
+}
+.word{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 80px;
+}
+.word h3{
+    font-size: 30px;
+}
+.result .details{
+    display: flex;
+    gap: 10px;
+    color: rgb(92, 88, 88);
+    margin: 5px 0 20px 0;
+    font-size: 15px;
+}
+.word-meaning{
+    color: rgb(78, 77, 77);
+}
+.word-example{
+     color: rgb(104, 102, 102);
+     font-style: italic;
+     margin-top: 15px;
+     border-left: 5px solid #97c9ca;
+     padding-left: 20px;
+
+}
